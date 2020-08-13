@@ -21,7 +21,10 @@ class Database {
             .filter({id: guildId})
             .run(this.conn)
                 .then((cursor: Cursor) => {
-
+                    cursor.toArray((err, result) => {
+                        if (err) throw err;
+                        return result[0]
+                    });
                 }).catch((err: Error) => {
                     throw err
                 })
