@@ -7,6 +7,7 @@ import fs from 'fs';
 import Discord from 'discord.js';
 const client = new Discord.Client();
 Discord.Constants.Events
+
 // Load Event Handlers
 fs.readdir('./dist/events/', (err, files) => {
     if (err) return console.error(err);
@@ -18,7 +19,7 @@ fs.readdir('./dist/events/', (err, files) => {
         
         if (eventName) {
             try {
-                // @ts-ignore
+                // @ts-ignore If it isn't a valid event type error and skip
                 client[event.once ? 'once' : 'on'](eventName, (...args) => event.run(client,...args)); 
             } catch (error) {
                 return;
