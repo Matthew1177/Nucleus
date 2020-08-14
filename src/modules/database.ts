@@ -15,6 +15,7 @@ class Database {
     }   
 
     ///// ----- Guilds Table ----- /////
+    // Get Guild
     getGuild (guildId: Snowflake) {
         this.r
             .table('guild')
@@ -25,7 +26,21 @@ class Database {
                         if (err) throw err;
                         return result[0];
                     });
-                }).catch((err: Error) => {
+                })
+                .catch((err: Error) => {
+                    throw err;
+                })
+    }
+    // Insert Guild
+    insertGuild (object: Object) {
+        this.r
+            .table('guild')
+            .insert(object)
+            .run(this.conn)
+                .then((resp: Response) => {
+
+                })
+                .catch((err: Error) => {
                     throw err;
                 })
     }
