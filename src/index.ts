@@ -5,8 +5,8 @@ dotenv.config();
 import fs from 'fs';
 // DiscordJS
 import Discord from 'discord.js';
+
 const client = new Discord.Client();
-Discord.Constants.Events
 
 // Load Event Handlers
 fs.readdir('./dist/events/', (err, files) => {
