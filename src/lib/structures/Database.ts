@@ -32,5 +32,12 @@ export default class Database {
             .run();
     }
 
+    insert(table: string, value: object = {}) {
+        return this.r
+            .table(table)
+            .insert(value)
+            .run();
+    }
+
     
 }
