@@ -3,16 +3,27 @@ import { r, MasterPool } from 'rethinkdb-ts';
 
 export default class Database {
     client: NucleusClient;
-    connection = r;
-    
+    r = r;
+    pool: MasterPool | null = null
 
     constructor (client: NucleusClient) {
         this.client = client;
 
-        this.init().catch(e => console.error(e));
+        this.r.connectPool()
+            .then(pool => this.pool = pool)
+            .catch(e => console.error(e))
     }
 
-    async init() {
-
+    get(table: string, key?: string) {
+        return key ? 
+            this.r
+                .table(table)
+                .get(key)
+                .run() :
+            this.r
+                .table(table)
+                .run();
     }
+
+    
 }
