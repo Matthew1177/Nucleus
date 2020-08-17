@@ -25,5 +25,12 @@ export default class Database {
                 .run();
     }
 
+    has(table: string, key: string) {
+        return !!this.r
+            .table(table)
+            .get(key)
+            .run();
+    }
+
     
 }
