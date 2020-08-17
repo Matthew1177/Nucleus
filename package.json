@@ -9,6 +9,9 @@
   "devDependencies": {
     "@types/node": "^14.0.27",
     "@types/rethinkdb": "^2.3.16",
+    "@typescript-eslint/eslint-plugin": "^3.9.1",
+    "@typescript-eslint/parser": "^3.9.1",
+    "eslint": "^7.7.0",
     "typescript": "^3.9.7"
   }
 }

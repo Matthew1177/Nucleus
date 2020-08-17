@@ -1,4 +1,8 @@
-import NucleusClient from "../NucleusClient";
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+// TODO: Switch to MongoDB API w/ AWS Document Store
+
+import NucleusClient from '../NucleusClient';
 import { r, MasterPool } from 'rethinkdb-ts';
 
 export default class Database {
@@ -11,7 +15,7 @@ export default class Database {
 
         this.r.connectPool()
             .then(pool => this.pool = pool)
-            .catch(e => console.error(e))
+            .catch(e => console.error(e));
     }
 
     get(table: string, key?: string) {
