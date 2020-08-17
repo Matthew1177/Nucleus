@@ -12,6 +12,6 @@ export default class Command {
     }
 
     execute (message: NucleusMessage) {
-
+        throw new Error('Unsupported operation.');
     }
 }

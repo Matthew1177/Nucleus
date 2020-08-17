@@ -7,10 +7,10 @@ export default class Event {
     once: boolean = false;
 
     constructor (client: NucleusClient) {
-        this.client = client
+        this.client = client;
     }
 
     execute (...args: any[]) {
-        
+        throw new Error('Unsupported operation.');
     }
 }
