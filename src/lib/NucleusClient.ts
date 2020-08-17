@@ -1,9 +1,8 @@
-// TODO: RethinkDB
-import { Client, ClientOptions } from 'discord.js'
+import { Client, ClientOptions } from 'discord.js';
 
-export default class Cluster extends Client {
+export default class NucleusClient extends Client {
     // Constructor
     public constructor (options: ClientOptions | undefined) {
-        super(options)
+        super(options);
     }
 }
