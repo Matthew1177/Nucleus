@@ -39,5 +39,19 @@ export default class Database {
             .run();
     }
 
-    
+    update(table: string, key: string, value: object = {}) {
+        return this.r
+            .table(table)
+            .get(key)
+            .update(value, { returnChanges: true })
+            .run();
+    }
+
+    delete (table: string, key: string) {
+        return this.r
+            .table(table)
+            .get(key)
+            .delete()
+            .run();
+    }
 }
