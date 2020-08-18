@@ -1,4 +1,4 @@
-import { Event, Constants } from '../lib/';
+import { Event } from '../lib/';
 
 export default class extends Event {
     execute (): void {
