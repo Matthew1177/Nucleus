@@ -13,15 +13,14 @@ export default class NucleusClient extends Client {
             
             files.forEach(file => {
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
-                const event = require(`${join(dir,file)}`);
+                const Event = require(`${join(dir,file)}`);
+                const event = new Event(this);
 
-                const eventName = file.split('.')[0];
-
-                if (eventName) {
+                if (event.name) {
                     try {
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore 
-                        this[event.once ? 'once' : 'on'](eventName, (...args: unknown[]) => event.execute(this,...args));
+                        this[event.once ? 'once' : 'on'](event.name, (...args: unknown[]) => event.execute(...args));
                     } catch (err) {
                         console.error(err);
                     }
