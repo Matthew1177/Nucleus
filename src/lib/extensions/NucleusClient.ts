@@ -1,9 +1,6 @@
 import { Client, ClientOptions } from 'discord.js';
 import { readdir } from 'fs';
 import { join, basename } from 'path';
-import Constants from '../Constants';
-
-
 
 export default class NucleusClient extends Client {
     // Constructor
@@ -27,7 +24,7 @@ export default class NucleusClient extends Client {
                 console.log(`[NC] Loaded Event '${event.name}'`);
                 ++total;
             });
-            console.log(Constants.ConsoleColors.Bright,`[NC] Loaded ${total} events`);
+            console.log(`[NC] Loaded ${total} events`);
         });
     }
 }
