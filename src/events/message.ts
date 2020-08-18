@@ -8,7 +8,9 @@ export default class extends Event {
 
     private handleDM (message: NucleusMessage): void {
         if (
-            (message.content.startsWith(process.env.DEFAULT_PREFIX ?? '!')) || 
+            (
+                process.env.DEFAULT_PREFIX &&
+                message.content.startsWith(process.env.DEFAULT_PREFIX)) || 
             (this.client.user && 
                 (
                     message.content.startsWith(`<@${this.client.user.id}> `) || 
