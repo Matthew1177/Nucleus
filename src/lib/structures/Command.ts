@@ -1,4 +1,4 @@
-import NucleusClient from '../NucleusClient';
+import NucleusClient from '../extensions/NucleusClient';
 import NucleusMessage from '../extensions/NucleusMessage';
 
 export default class Command {

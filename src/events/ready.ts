@@ -1,4 +1,4 @@
-import Event from '../lib/NucleusClient';
+import { Event, Constants } from '../lib/';
 
 export default class extends Event {
     execute (): void {

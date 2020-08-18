@@ -1,4 +1,4 @@
-import NucleusClient from '../NucleusClient';
+import NucleusClient from '../extensions/NucleusClient';
 
 export default class Event {
     client: NucleusClient;
