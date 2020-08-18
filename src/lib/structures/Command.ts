@@ -6,7 +6,6 @@ export default class Command {
     name: string;
     aliases: string[] = [];
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor (client: NucleusClient, name: string) {
         this.client = client;
         this.name = name;
