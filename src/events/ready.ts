@@ -1,7 +1,7 @@
-import Event from '../lib/structures/Event';
+import Event from '../lib/NucleusClient';
 
 export default class extends Event {
     execute (): void {
-        console.log('[NC] - READY');
+        console.log('[NC] - Ready');
     }
 } 

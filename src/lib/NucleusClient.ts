@@ -1,6 +1,13 @@
 import { Client, ClientOptions } from 'discord.js';
 import { readdir } from 'fs';
 import { join, basename } from 'path';
+import Constants from './constants';
+import Event from './structures/Event';
+import Command from './structures/Command';
+import NucleusMessage from './extensions/NucleusMessage';
+
+
+
 export default class NucleusClient extends Client {
     // Constructor
     public constructor (options?: ClientOptions) {
@@ -10,7 +17,7 @@ export default class NucleusClient extends Client {
     public loadEvents (dir: string): void {
         readdir(dir, (err,files) => {
             if (err) return console.error(err);
-            
+            let total = 0;
             files.forEach(file => {
                 const name = basename(file).split('.').slice(0, -1).join('.');
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -20,8 +27,12 @@ export default class NucleusClient extends Client {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore 
                 this[event.once ? 'once' : 'on'](event.name, (...args: unknown[]) => event.execute(...args));
-                console.log(`Loaded Event ${event.name}`);
+                console.log(`[NC] Loaded Event '${event.name}'`);
+                ++total;
             });
+            console.log(`[NC] Loaded ${total} events`);
         });
     }
 }
+
+export { Constants, Event, Command, NucleusMessage };
