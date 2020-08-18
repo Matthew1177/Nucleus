@@ -1,6 +1,6 @@
 import { Client, ClientOptions } from 'discord.js';
 import { readdir } from 'fs';
-import { join } from 'path';
+import { join, basename } from 'path';
 export default class NucleusClient extends Client {
     // Constructor
     public constructor (options?: ClientOptions) {
@@ -12,19 +12,15 @@ export default class NucleusClient extends Client {
             if (err) return console.error(err);
             
             files.forEach(file => {
+                const name = basename(file).split('.').slice(0, -1).join('.');
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
-                const Event = require(`${join(dir,file)}`);
-                const event = new Event(this);
+                const Event = ((r) => r.default || r)(require(`${join(dir,file)}`));
+                const event = new Event(this, name);
 
-                if (event.name) {
-                    try {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore 
-                        this[event.once ? 'once' : 'on'](event.name, (...args: unknown[]) => event.execute(...args));
-                    } catch (err) {
-                        console.error(err);
-                    }
-                }
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore 
+                this[event.once ? 'once' : 'on'](event.name, (...args: unknown[]) => event.execute(...args));
+                console.log(`Loaded Event ${event.name}`);
             });
         });
     }

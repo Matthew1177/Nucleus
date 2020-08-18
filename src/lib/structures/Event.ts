@@ -1,17 +1,17 @@
 import NucleusClient from '../NucleusClient';
-import { basename } from 'path';
 
 export default class Event {
     client: NucleusClient;
-    name: string = basename(__filename).split('.').slice(0, -1).join('.');
+    name: string;
     once = false;
 
-    constructor (client: NucleusClient) {
+    constructor (client: NucleusClient, name: string) {
         this.client = client;
+        this.name = name;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    execute (...args: unknown[]) : void {
+    execute (...args: unknown[]): void {
         throw new Error('Unsupported operation.');
     }
 }
