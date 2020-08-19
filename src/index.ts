@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import { NucleusClient } from './lib/';
 import { join } from 'path';
 
-
 dotenv.config();
 const client = new NucleusClient();
 

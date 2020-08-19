@@ -12,7 +12,7 @@ export default class Command {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    execute (message: NucleusMessage): void {
+    execute (message: NucleusMessage, args: string[]): void {
         throw new Error('Unsupported operation.');
     }
 }
