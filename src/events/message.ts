@@ -1,5 +1,7 @@
 import { NucleusMessage, Event } from "../lib/";
 
+// TODO: Load commands
+
 export default class extends Event {
     execute (message: NucleusMessage): void {
         if (message.partial || message.author.bot) return;
@@ -22,6 +24,7 @@ export default class extends Event {
         }
         if (toSplit === "") return;
         const args = toSplit.split(" ");
+        message.send(args);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
