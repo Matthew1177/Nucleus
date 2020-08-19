@@ -7,7 +7,7 @@ export default class extends Event {
             message.delete();
 
             message.send('Loading...').then((message1: Message) => {
-                const message2 = <NucleusMessage> message1;
+                const message2: NucleusMessage = <NucleusMessage> message1;
                 message2.edit(`$: ${message.content.slice(5)}`);
             });
         }
