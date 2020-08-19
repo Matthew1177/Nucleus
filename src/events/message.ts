@@ -7,19 +7,20 @@ export default class extends Event {
     }
 
     private handleDM (message: NucleusMessage): void {
-        if (
-            (
-                process.env.DEFAULT_PREFIX &&
-                message.content.startsWith(process.env.DEFAULT_PREFIX)) || 
-            (this.client.user && 
-                (
-                    message.content.startsWith(`<@${this.client.user.id}> `) || 
-                    message.content.startsWith(`<@!${this.client.user.id}> `)
-                )
-            )
-        ) 
-        {
-            // TODO
+        if (message.content.startsWith(process.env.DEFAULT_PREFIX!)) {
+            const sliced = message.content.slice(process.env.DEFAULT_PREFIX!.length);
+            
+            const split = sliced.split(' ');
+        } else if (this.client.user) {
+            if (message.content.startsWith(`<@${this.client.user.id}> `)) {
+                const sliced = message.content.slice(`<@${this.client.user.id}> `.length);
+            
+                const split = sliced.split(' ');
+            } else if (message.content.startsWith(`<@!${this.client.user.id}> `)) {
+                const sliced = message.content.slice(`<@!${this.client.user.id}> `.length);
+            
+                const split = sliced.split(' ');
+            }
         }
     }
 
