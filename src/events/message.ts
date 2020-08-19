@@ -1,5 +1,4 @@
 import { NucleusMessage, Event } from "../lib/";
-import { Message } from "discord.js";
 
 export default class extends Event {
     execute (message: NucleusMessage): void {
