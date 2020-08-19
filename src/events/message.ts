@@ -3,20 +3,9 @@ import { Message } from "discord.js";
 
 export default class extends Event {
     execute (message: NucleusMessage): void {
-        if (message.content.startsWith("echo ")) {
-            message.delete();
+        if (message.partial || message.author.bot) return;
 
-            message.send("Loading...").then((message1: Message) => {
-                const message2: NucleusMessage = <NucleusMessage> message1;
-                message2.edit(`$: ${message.content.slice(5)}`);
-            });
-        }
-        
-        /*
-        if (message.channel.type == 'dm') {
-            this.handleDM(message);
-        }
-        */
+        if (message.channel.type === "dm") this.handleDM(message);
     }
 
     private handleDM (message: NucleusMessage): void {
@@ -25,6 +14,15 @@ export default class extends Event {
             `<@!${this.client.user!.id}> `,
             process.env.DEFAULT_PREFIX!
         ];
+
+        let toSplit = "";
+        for (const prefix of prefixes) {
+            if (message.content.startsWith(prefix)) {
+                toSplit = message.content.slice(prefix.length);
+            }
+        }
+        if (toSplit === "") return;
+        const args = toSplit.split(" ");
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
