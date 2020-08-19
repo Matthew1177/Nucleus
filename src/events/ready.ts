@@ -1,7 +1,7 @@
-import { Event } from '../lib/';
+import { Event } from "../lib/";
 
 export default class extends Event {
     execute (): void {
-        console.log('[NC] - Ready');
+        console.log("[NC] - Ready");
     }
 } 

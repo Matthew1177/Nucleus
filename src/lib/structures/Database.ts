@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // TODO: Switch to MongoDB API w/ AWS Document Store
 
-import NucleusClient from '../extensions/NucleusClient';
-import { r, MasterPool } from 'rethinkdb-ts';
+import NucleusClient from "../extensions/NucleusClient";
+import { r, MasterPool } from "rethinkdb-ts";
 
 export default class Database {
     client: NucleusClient;

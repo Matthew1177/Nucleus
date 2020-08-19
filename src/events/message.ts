@@ -1,12 +1,12 @@
-import { NucleusMessage, Event } from '../lib/';
-import { Message } from 'discord.js';
+import { NucleusMessage, Event } from "../lib/";
+import { Message } from "discord.js";
 
 export default class extends Event {
     execute (message: NucleusMessage): void {
-        if (message.content.startsWith('echo ')) {
+        if (message.content.startsWith("echo ")) {
             message.delete();
 
-            message.send('Loading...').then((message1: Message) => {
+            message.send("Loading...").then((message1: Message) => {
                 const message2: NucleusMessage = <NucleusMessage> message1;
                 message2.edit(`$: ${message.content.slice(5)}`);
             });
@@ -29,6 +29,6 @@ export default class extends Event {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private handleGuild (message: NucleusMessage): void {
-        if (!process.env.DEFAULT_PREFIX) throw Error('process.env.DEFAULT_PREFIX is undefined.');
+        if (!process.env.DEFAULT_PREFIX) throw Error("process.env.DEFAULT_PREFIX is undefined.");
     }
 } 

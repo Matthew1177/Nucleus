@@ -1,4 +1,4 @@
-import NucleusClient from '../extensions/NucleusClient';
+import NucleusClient from "../extensions/NucleusClient";
 
 export default class Event {
     client: NucleusClient;
@@ -12,6 +12,6 @@ export default class Event {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     execute (...args: unknown[]): void {
-        throw new Error('Unsupported operation.');
+        throw new Error("Unsupported operation.");
     }
 }
