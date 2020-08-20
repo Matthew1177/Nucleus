@@ -1,6 +1,4 @@
-import { NucleusMessage, Event } from "../lib/";
-
-// TODO: Load commands
+import { NucleusMessage, Event, Command } from "../lib/";
 
 export default class extends Event {
     execute (message: NucleusMessage): void {
