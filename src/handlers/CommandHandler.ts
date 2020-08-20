@@ -24,4 +24,11 @@ export default class CommandHandler extends Collection<string, Command> {
             });
         });
     }
+
+    getCommand (name: string): Command | null {
+        if (this.has(name)) return this.get(name) as Command;
+
+        const alias = this.find((cmd) => cmd.aliases.includes(name));
+        return alias ?? null;
+    }
 }
