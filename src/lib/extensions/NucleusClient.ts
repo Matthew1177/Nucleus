@@ -14,6 +14,7 @@ export default class NucleusClient extends Client {
             let total = 0;
             console.log(`Loading Events from '${dir}'`);
             files.forEach(file => {
+                if (!file.endsWith(".js")) return;
                 const name = basename(file).split(".").slice(0, -1).join(".");
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
                 const Event = ((r) => r.default || r)(require(`${join(dir,file)}`));
