@@ -1,9 +1,10 @@
 import { Command, NucleusClient } from "../lib";
 import { Collection } from "discord.js";
-import { readdir } from "fs";
-import { basename, join } from "path";
+import { readdirSync } from "fs";
+import { basename } from "path";
 
 export default class CommandHandler extends Collection<string, Command> {
+    modules: Collection<string,Collection<string,Command>> = new Collection();
     client: NucleusClient;
 
     constructor (client: NucleusClient, dir: string) {
@@ -11,17 +12,22 @@ export default class CommandHandler extends Collection<string, Command> {
 
         this.client = client;
         
-        readdir(dir, (err,files) => {
-            if (err) return console.error(err);
+        readdirSync(dir).forEach(mod => {
+            const cmdsInMod = readdirSync(`${dir}/${mod}/`).filter(f => f.endsWith(".js"));
+            const modName = basename(mod).split(".").slice(0, -1).join(".");
 
-            files.forEach(file => {
+            this.modules.set(modName, new Collection());
+            
+
+            for (const file of cmdsInMod) {
                 const name = basename(file).split(".").slice(0, -1).join(".");
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
-                const Command = ((r) => r.default || r)(require(`${join(dir,file)}`));
-                const command = new Command(client, name);
+                const req = require(`${dir}/${mod}/${file}`);
+                const newReq = req(client, name);
 
-                this.set(name, command);
-            });
+                this.set(name, newReq);
+                this.modules.get(modName)!.set(name, newReq);
+            }
         });
     }
 
@@ -31,4 +37,8 @@ export default class CommandHandler extends Collection<string, Command> {
         const alias = this.find((cmd) => cmd.aliases.includes(name));
         return alias ?? null;
     }
+
+    getModule (name: string): Collection<string,Command> | null {
+        return this.modules.has(name) ? this.modules.get(name) as Collection<string,Command> : null;
+    } 
 }
