@@ -3,6 +3,7 @@ import { readdir } from "fs";
 import { join, basename } from "path";
 
 export default class NucleusClient extends Client {
+    extraData: Record<string, unknown> = {};
     // Constructor
     public constructor (options?: ClientOptions) {
         super(options);
