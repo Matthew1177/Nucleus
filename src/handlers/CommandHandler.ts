@@ -23,7 +23,7 @@ export default class CommandHandler extends Collection<string, Command> {
 
             this.modules.set(modName, new Collection());
             
-            console.log(`Loading Module ${modName}`);
+            console.log(`Loading Module '${modName}'`);
 
             for (const file of cmdsInMod) {
                 const name = basename(file).split(".").slice(0, -1).join(".");
@@ -41,7 +41,7 @@ export default class CommandHandler extends Collection<string, Command> {
             console.log(`Loaded Module '${modName}'`);
         });
 
-        console.log(`Loaded ${numMods} Modules and ${numCmds}`);
+        console.log(`Loaded ${numMods} Module(s) and ${numCmds} Command(s)`);
     }
 
     getCommand (name: string): Command | null {
