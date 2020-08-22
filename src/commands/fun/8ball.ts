@@ -13,11 +13,9 @@ export default class extends Command {
     execute (message: NucleusMessage, args: Array<string>): void {
         const rand = Math.floor(Math.random()*responses.length);
         const embed = new MessageEmbed()
-            .setTitle("8 Ball")
-            .setColor(rand < 10 ? 0x5cb85c : (rand < 15 ? 0xf0ad4e : 0xd9534f));
-        if (args.join(" ").trim()) embed.addField("Question", args.join(" ").trim());
-        
-        embed.addField("Response", responses[rand]);
+            .setColor(rand < 10 ? 0x5cb85c : (rand < 15 ? 0xf0ad4e : 0xd9534f))   
+            .setDescription(`${responses[rand]}`)
+            .setAuthor("Magic 8 Ball", "https://github.com/twitter/twemoji/blob/master/assets/72x72/1f3b1.png?raw=true");
 
         message.channel.send(embed);
     }
