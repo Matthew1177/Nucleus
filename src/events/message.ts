@@ -81,7 +81,8 @@ export default class extends Event {
             cmdCooldown!.set(message.author.id,now+cmd.cooldown*1000);
             try {
                 cmd.execute(message,args);
-            } catch {
+            } catch (error) {
+                console.error(error);
                 message.channel.send("An error occured while trying to execute that command.");
             }
             
