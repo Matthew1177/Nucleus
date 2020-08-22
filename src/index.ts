@@ -1,12 +1,14 @@
 import dotenv from "dotenv";
-import { NucleusClient } from "./lib/";
+import { ShardingManager } from "discord.js";
 import { join } from "path";
-import CommandHandler from "./handlers/CommandHandler";
 
 dotenv.config();
-const client = new NucleusClient();
 
-client.extraData.commands = new CommandHandler(client,join(__dirname,"commands"));
-client.loadEvents(join(__dirname,"events"));
+const manager = new ShardingManager(join(__dirname,"bot.js"),{
+    totalShards: Number(process.env.TOTAL_SHARDS), 
+    shardList: process.env.SHARD_LIST!.split(/, */).map(Number), 
+    token: process.env.TOKEN});
 
-client.login(process.env.TOKEN);
+manager.on("shardCreate", shard => console.log(`Launched shard ${shard.id}`));
+
+manager.spawn();
