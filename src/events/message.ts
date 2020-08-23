@@ -32,9 +32,67 @@ export default class extends Event {
     execute (message: NucleusMessage): void {
         if (message.partial || message.author.bot) return;
 
-        if (message.channel.type === "dm") this.handleDM(message); else this.handleDM(message);
+        if (message.channel.type === "dm") this.handleDM(message); else this.handleGuild(message);
     }
 
+    private handleGuild (message: NucleusMessage): void {
+        this.client.database.get("guild", message.guild!.id).then(resp => {
+            const now = Date.now();
+            const commands = this.client.extraData.commands as CommandHandler;
+            const prefixes = [
+                `<@${this.client.user!.id}> `,
+                `<@!${this.client.user!.id}> `,
+                resp.settings.prefix || process.env.DEFAULT_PREFIX!
+            ];
+
+            let toSplit = "";
+            for (const prefix of prefixes) {
+                if (message.content.startsWith(prefix)) {
+                    toSplit = message.content.slice(prefix.length);
+                }
+            }
+            if (toSplit === "") return;
+            const args = toSplit.split(" ");
+            const cmd = commands.getCommand(args.shift()!);
+
+            if (cmd) {
+                const cmdCooldown = cooldowns.get(cmd.name);
+
+                if (!cmdCooldown) cooldowns.set(cmd.name, new Collection());
+            
+                const cooldown = cooldowns.get(cmd.name)!.get(message.author.id);
+                if (cooldown) {
+                    if (now < cooldown) {
+                        const embed = new MessageEmbed()
+                            .setColor(0x36393F)
+                            .setTitle("Cooldown")
+                            .setDescription(`Please wait \`${
+                                Math.round(((cooldown-now)/1000-0.5)) ? 
+                                    Math.round(((cooldown-now)/1000-0.5)) : 
+                                    Math.round((cooldown-now)/100-0.5)/10 }\` second${ 
+                                (Math.round(((cooldown-now)/1000-0.5)) ? 
+                                    Math.round(((cooldown-now)/1000-0.5)) : 
+                                    Math.round((cooldown-now)/100-0.5)/10
+                                ) === 1 ? "" : "s" } before running this command again.`);
+
+                        message.channel.send(embed);
+                        return;
+                    }
+                }
+            cmdCooldown!.set(message.author.id,now+cmd.cooldown*1000);
+            try {
+                cmd.execute(message,args);
+            } catch (error) {
+                console.error(error);
+                message.channel.send("An error occured while trying to execute that command.");
+            }
+            
+            } else return;
+        });
+        
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private handleDM (message: NucleusMessage): void {
         const now = Date.now();
         const commands = this.client.extraData.commands as CommandHandler;
@@ -87,11 +145,6 @@ export default class extends Event {
             }
             
         } else return;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private handleGuild (message: NucleusMessage): void {
-        if (!process.env.DEFAULT_PREFIX) throw Error("process.env.DEFAULT_PREFIX is undefined.");
     }
 } 
 

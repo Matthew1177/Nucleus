@@ -1,9 +1,11 @@
 import { Client, ClientOptions } from "discord.js";
 import { readdir } from "fs";
 import { join, basename } from "path";
+import Database from "../structures/Database";
 
 export default class NucleusClient extends Client {
     extraData: Record<string, unknown> = {};
+    database = new Database(this);
     // Constructor
     public constructor (options?: ClientOptions) {
         super(options);

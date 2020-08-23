@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-// TODO: Switch to MongoDB API w/ AWS Document Store
+// Typing this file can cause issues
 
 import NucleusClient from "../extensions/NucleusClient";
 import { r, MasterPool } from "rethinkdb-ts";
@@ -13,7 +12,7 @@ export default class Database {
     constructor (client: NucleusClient) {
         this.client = client;
 
-        this.r.connectPool()
+        this.r.connectPool({db: "discord"})
             .then(pool => this.pool = pool)
             .catch(e => console.error(e));
     }
@@ -29,13 +28,7 @@ export default class Database {
                 .run();
     }
 
-    has(table: string, key: string) {
-        return !!this.r
-            .table(table)
-            .get(key)
-            .run();
-    }
-
+    // eslint-disable-next-line @typescript-eslint/ban-types
     insert(table: string, value: object = {}) {
         return this.r
             .table(table)
@@ -43,6 +36,7 @@ export default class Database {
             .run();
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     update(table: string, key: string, value: object = {}) {
         return this.r
             .table(table)
