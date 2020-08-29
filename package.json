@@ -4,11 +4,11 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "rethinkdb-ts": "^2.4.5"
+    "mongodb": "^3.6.0"
   },
   "devDependencies": {
+    "@types/mongodb": "^3.5.26",
     "@types/node": "^14.0.27",
-    "@types/rethinkdb": "^2.3.16",
     "@typescript-eslint/eslint-plugin": "^3.9.1",
     "@typescript-eslint/parser": "^3.9.1",
     "eslint": "^7.7.0",
