@@ -8,7 +8,7 @@ const responses = [
 ];
 
 export default class extends Command {
-    cooldown = 0;
+    cooldown = 3;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     execute (message: NucleusMessage, args: Array<string>): void {
         const rand = Math.floor(Math.random()*responses.length);
