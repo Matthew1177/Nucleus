@@ -1,6 +1,6 @@
-import { NucleusMessage, Event, NucleusClient } from "../lib/";
+import { Event, NucleusClient } from "../lib/";
 import CommandHandler from "../handlers/CommandHandler";
-import { Snowflake, Collection, MessageEmbed } from "discord.js";
+import { Snowflake, Collection, MessageEmbed, Message } from "discord.js";
 
 const cooldowns: Collection<string,Collection<Snowflake,number>> = new Collection();
 
@@ -29,13 +29,13 @@ export default class extends Event {
         });
     }
 
-    execute (message: NucleusMessage): void {
+    execute (message: Message): void {
         if (message.partial || message.author.bot) return;
 
         if (message.channel.type === "dm") this.handleDM(message); else this.handleGuild(message);
     }
 
-    private handleGuild (message: NucleusMessage): void {
+    private handleGuild (message: Message): void {
         // Get Guild Record
         this.client.database.getOne("guild_settings", {id: message.guild!.id})
             .then(record => {
@@ -103,7 +103,7 @@ export default class extends Event {
             .catch(err => console.error(err));
     }
 
-    private handleDM (message: NucleusMessage): void {
+    private handleDM (message: Message): void {
         const now = Date.now();
         const commands = this.client.extraData.commands as CommandHandler;
         const prefixes = [
