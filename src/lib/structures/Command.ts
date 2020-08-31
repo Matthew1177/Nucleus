@@ -6,6 +6,8 @@ export default class Command {
     name: string;
     aliases: string[] = [];
     cooldown = 3;
+    description: string | null = null;
+    usage: string | null = null;
 
     constructor (client: NucleusClient, name: string) {
         this.client = client;
