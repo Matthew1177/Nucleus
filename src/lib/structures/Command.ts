@@ -1,5 +1,5 @@
-import NucleusClient from "../extensions/NucleusClient";
-import { Message } from "discord.js";
+import NucleusClient from '../extensions/NucleusClient'
+import { Message } from 'discord.js'
 
 export default class Command {
     client: NucleusClient;
@@ -10,12 +10,12 @@ export default class Command {
     usage: string | null = null;
 
     constructor (client: NucleusClient, name: string) {
-        this.client = client;
-        this.name = name;
+      this.client = client
+      this.name = name
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     execute (message: Message, args: string[]): void {
-        throw new Error("Unsupported operation.");
+      throw new Error('Unsupported operation.')
     }
 }
