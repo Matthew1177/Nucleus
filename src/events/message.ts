@@ -13,9 +13,9 @@ function sweepCooldowns (lifetime: number): void {
   const now = Date.now()
 
   for (const command in cooldowns) {
-        cooldowns.get(command)!.sweep(
-          c => now - c > lifetimeMs
-        )
+    cooldowns.get(command)!.sweep(
+      c => now - c > lifetimeMs
+    )
   }
 }
 
@@ -51,9 +51,9 @@ export default class extends Event {
         const now = Date.now()
         const commands = this.client.extraData.commands as CommandHandler
         const prefixes = [
-                    `<@${this.client.user!.id}> `,
-                    `<@!${this.client.user!.id}> `,
-                    record.prefix
+          `<@${this.client.user!.id}> `,
+          `<@!${this.client.user!.id}> `,
+          record.prefix
         ]
 
         let toSplit = ''
@@ -78,13 +78,13 @@ export default class extends Event {
                 .setColor(0x36393F)
                 .setTitle('Cooldown')
                 .setDescription(`Please wait \`${
-                                    Math.round(((cooldown - now) / 1000 - 0.5))
-                                        ? Math.round(((cooldown - now) / 1000 - 0.5))
-                                        : Math.round((cooldown - now) / 100 - 0.5) / 10}\` second${
-                                    (Math.round(((cooldown - now) / 1000 - 0.5))
-                                        ? Math.round(((cooldown - now) / 1000 - 0.5))
-                                        : Math.round((cooldown - now) / 100 - 0.5) / 10
-                                    ) === 1 ? '' : 's'} before running this command again.`)
+                  Math.round(((cooldown - now) / 1000 - 0.5))
+                    ? Math.round(((cooldown - now) / 1000 - 0.5))
+                    : Math.round((cooldown - now) / 100 - 0.5) / 10}\` second${
+                  (Math.round(((cooldown - now) / 1000 - 0.5))
+                    ? Math.round(((cooldown - now) / 1000 - 0.5))
+                    : Math.round((cooldown - now) / 100 - 0.5) / 10
+                  ) === 1 ? '' : 's'} before running this command again.`)
 
               message.channel.send(embed)
               return
@@ -106,9 +106,9 @@ export default class extends Event {
     const now = Date.now()
     const commands = this.client.extraData.commands as CommandHandler
     const prefixes = [
-            `<@${this.client.user!.id}> `,
-            `<@!${this.client.user!.id}> `,
-            process.env.DEFAULT_PREFIX!
+      `<@${this.client.user!.id}> `,
+      `<@!${this.client.user!.id}> `,
+      process.env.DEFAULT_PREFIX!
     ]
 
     let toSplit = ''
@@ -133,25 +133,25 @@ export default class extends Event {
             .setColor(0x36393F)
             .setTitle('Cooldown')
             .setDescription(`Please wait \`${
-                            Math.round(((cooldown - now) / 1000 - 0.5))
-                                ? Math.round(((cooldown - now) / 1000 - 0.5))
-                                : Math.round((cooldown - now) / 100 - 0.5) / 10}\` second${
-                            (Math.round(((cooldown - now) / 1000 - 0.5))
-                                ? Math.round(((cooldown - now) / 1000 - 0.5))
-                                : Math.round((cooldown - now) / 100 - 0.5) / 10
-                            ) === 1 ? '' : 's'} before running this command again.`)
+              Math.round(((cooldown - now) / 1000 - 0.5))
+                ? Math.round(((cooldown - now) / 1000 - 0.5))
+                : Math.round((cooldown - now) / 100 - 0.5) / 10}\` second${
+              (Math.round(((cooldown - now) / 1000 - 0.5))
+                ? Math.round(((cooldown - now) / 1000 - 0.5))
+                : Math.round((cooldown - now) / 100 - 0.5) / 10
+              ) === 1 ? '' : 's'} before running this command again.`)
 
           message.channel.send(embed)
           return
         }
       }
-            cmdCooldown!.set(message.author.id, now + cmd.cooldown * 1000)
-            try {
-              cmd.execute(message, args)
-            } catch (error) {
-              console.error(error)
-              message.channel.send('An error occured while trying to execute that command.')
-            }
+      cmdCooldown!.set(message.author.id, now + cmd.cooldown * 1000)
+      try {
+        cmd.execute(message, args)
+      } catch (error) {
+        console.error(error)
+        message.channel.send('An error occured while trying to execute that command.')
+      }
     }
   }
 }

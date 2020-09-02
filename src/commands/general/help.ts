@@ -27,9 +27,9 @@ export default class extends Command {
     }
     const embed = new MessageEmbed()
       .setDescription(
-              `**Dashboard:** (link)
-              **Commands:** (link)
-              **Donate:** (link)`
+        `**Dashboard:** (link)
+        **Commands:** (link)
+        **Donate:** (link)`
       )
       .setColor(0x000000)
     return embed

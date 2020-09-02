@@ -16,7 +16,7 @@ export default class CachedDatabase {
 
     async getGuildSettings (id: Snowflake): Promise<any> {
       const res = await this.database.getOne('guild', { id })
-      this.guildCache.set(id, res)
+      this.guildCache.set(id, { res })
       return res
     }
 }

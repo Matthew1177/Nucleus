@@ -32,10 +32,10 @@ export default class CommandHandler extends Collection<string, Command> {
         const newReq = new Req(client, name)
 
         this.set(name, newReq)
-              this.modules.get(modName)!.set(name, newReq)
+          this.modules.get(modName)!.set(name, newReq)
 
-              console.log(`Loaded Command '${name}'`)
-              ++numCmds
+          console.log(`Loaded Command '${name}'`)
+          ++numCmds
       }
       ++numMods
       console.log(`Loaded Module '${modName}'`)
