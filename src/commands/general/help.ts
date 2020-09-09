@@ -10,11 +10,11 @@ export default class extends Command {
   }
 
   helpEmbed(name?: string): MessageEmbed {
-    if (name) {
+    if (name && name.toLowerCase().trim() !== 'help') {
       const commands = <CommandHandler>this.client.extraData.commands;
       const command = commands.getCommand(name);
       if (command) {
-        const embed = new MessageEmbed().setColor(0x000000);
+        const embed = new MessageEmbed().setColor(0x23272a);
         embed.setTitle(
           command.name.charAt(0).toUpperCase() + command.name.slice(1)
         );
@@ -28,11 +28,11 @@ export default class extends Command {
     }
     const embed = new MessageEmbed()
       .setDescription(
-        `**Dashboard:** (link)
+        `**Dashboard:** (planned)
         **Commands:** (link)
         **Donate:** (link)`
       )
-      .setColor(0x000000);
+      .setColor(0x23272a);
     return embed;
   }
 }
