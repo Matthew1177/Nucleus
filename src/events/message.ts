@@ -7,19 +7,6 @@ const cooldowns: Collection<
   Collection<Snowflake, number>
 > = new Collection();
 
-function sweepCooldowns(lifetime: number): void {
-  if (lifetime <= 0) {
-    return;
-  }
-
-  const lifetimeMs = lifetime * 1000;
-  const now = Date.now();
-
-  for (const command in cooldowns) {
-    cooldowns.get(command)!.sweep(c => now - c > lifetimeMs);
-  }
-}
-
 export default class extends Event {
   constructor(client: NucleusClient, name: string) {
     super(client, name);
@@ -28,6 +15,12 @@ export default class extends Event {
     arr.forEach(x => {
       cooldowns.set(x.name, new Collection());
     });
+
+    setInterval(
+      this.sweepCooldowns,
+      Number(process.env.COOLDOWN_SWEEP_INTERVAL),
+      [Number(process.env.COOLDOWN_LIFETIME)]
+    );
   }
 
   execute(message: Message): void {
@@ -35,6 +28,27 @@ export default class extends Event {
 
     if (message.channel.type === 'dm') this.handleDM(message);
     else this.handleDM(message);
+  }
+
+  sweepCooldowns(lifetime: number): void {
+    if (lifetime <= 0) {
+      return;
+    }
+
+    const lifetimeMs = lifetime * 1000;
+    const now = Date.now();
+
+    for (const command in cooldowns) {
+      cooldowns.get(command)!.sweep(c => now - c > lifetimeMs);
+    }
+  }
+
+  secondsUntil(then: number, now: number): string {
+    if (then - now === 0) return '`0` seconds';
+    if (then - now > 1)
+      return `\`${(Math.ceil((then - now) * 10) / 10).toString()}\` seconds`;
+    if (Math.ceil((then - now) * 100) / 100 === 1) return '`1` second';
+    return (Math.ceil((then - now) * 100) / 100).toString();
   }
 
   private handleGuild(message: Message): void {
@@ -72,17 +86,10 @@ export default class extends Event {
                   .setColor(0x36393f)
                   .setTitle('Cooldown')
                   .setDescription(
-                    `Please wait \`${
-                      Math.round((cooldown - now) / 1000 - 0.5)
-                        ? Math.round((cooldown - now) / 1000 - 0.5)
-                        : Math.round((cooldown - now) / 100 - 0.5) / 10
-                    }\` second${
-                      (Math.round((cooldown - now) / 1000 - 0.5)
-                        ? Math.round((cooldown - now) / 1000 - 0.5)
-                        : Math.round((cooldown - now) / 100 - 0.5) / 10) === 1
-                        ? ''
-                        : 's'
-                    } before running this command again.`
+                    `Please wait \`${this.secondsUntil(
+                      cooldown,
+                      now
+                    )}\` before running this command again.`
                   );
 
                 message.channel.send(embed);
@@ -137,17 +144,10 @@ export default class extends Event {
             .setColor(0x36393f)
             .setTitle('Cooldown')
             .setDescription(
-              `Please wait \`${
-                Math.round((cooldown - now) / 1000 - 0.5)
-                  ? Math.round((cooldown - now) / 1000 - 0.5)
-                  : Math.round((cooldown - now) / 100 - 0.5) / 10
-              }\` second${
-                (Math.round((cooldown - now) / 1000 - 0.5)
-                  ? Math.round((cooldown - now) / 1000 - 0.5)
-                  : Math.round((cooldown - now) / 100 - 0.5) / 10) === 1
-                  ? ''
-                  : 's'
-              } before running this command again.`
+              `Please wait \`${this.secondsUntil(
+                cooldown,
+                now
+              )}\` before running this command again.`
             );
 
           message.channel.send(embed);
@@ -166,7 +166,3 @@ export default class extends Event {
     }
   }
 }
-
-setInterval(sweepCooldowns, Number(process.env.COOLDOWN_SWEEP_INTERVAL), [
-  Number(process.env.COOLDOWN_LIFETIME),
-]);
