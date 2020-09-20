@@ -4,7 +4,7 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
-    "mongodb": "^3.6.1"
+    "mongodb": "^3.6.2"
   },
   "devDependencies": {
     "@types/ws": "^7.2.6",
