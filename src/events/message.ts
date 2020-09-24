@@ -8,9 +8,13 @@ const cooldowns: Collection<
 > = new Collection();
 
 export default class extends Event {
+  mentions: string[];
   constructor(client: NucleusClient, name: string) {
     super(client, name);
-
+    this.mentions = [
+      `<@${this.client.user!.id}> `,
+      `<@!${this.client.user!.id}> `,
+    ];
     const arr = (this.client.extraData.commands as CommandHandler).array();
     arr.forEach(x => {
       cooldowns.set(x.name, new Collection());
@@ -27,7 +31,7 @@ export default class extends Event {
     if (message.partial || message.author.bot) return;
 
     if (message.channel.type === 'dm') this.handleDM(message);
-    else this.handleDM(message);
+    else this.handleGuild(message);
   }
 
   sweepCooldowns(lifetime: number): void {
@@ -43,6 +47,18 @@ export default class extends Event {
     }
   }
 
+  makeCooldownEmbed(then: number, now: number): MessageEmbed {
+    return new MessageEmbed()
+      .setColor(0x36393f)
+      .setTitle('Cooldown')
+      .setDescription(
+        `Please wait \`${this.secondsUntil(
+          then,
+          now
+        )}\` before running this command again.`
+      );
+  }
+
   secondsUntil(then: number, now: number): string {
     if (then - now === 0) return '`0` seconds';
     if (then - now > 1)
@@ -51,18 +67,23 @@ export default class extends Event {
     return (Math.ceil((then - now) * 100) / 100).toString();
   }
 
+  makeErrorEmbed(): MessageEmbed {
+    return new MessageEmbed()
+      .setColor(0xff0000)
+      .setTitle('Error')
+      .setDescription(
+        'An error occurred while trying to execute that command.'
+      );
+  }
+
   private handleGuild(message: Message): void {
+    if (this.client.user === null) return;
     const now = Date.now();
     const commands = this.client.extraData.commands as CommandHandler;
-    if (this.client.user === null) return;
     this.client.database.getGuild(message.guild!.id).then(guildRecord => {
       if (guildRecord) {
-        if (guildRecord.prefix === undefined || guildRecord.prefix === null) {
-          const prefixes = [
-            `<@${this.client.user!.id}> `,
-            `<@!${this.client.user!.id}> `,
-            guildRecord.prefix,
-          ];
+        if (typeof guildRecord.prefix === 'string') {
+          const prefixes = [...this.mentions, guildRecord.prefix];
 
           let toSplit = '';
           for (const prefix of prefixes) {
@@ -82,16 +103,7 @@ export default class extends Event {
             const cooldown = cooldowns.get(cmd.name)!.get(message.author.id);
             if (cooldown) {
               if (now < cooldown) {
-                const embed = new MessageEmbed()
-                  .setColor(0x36393f)
-                  .setTitle('Cooldown')
-                  .setDescription(
-                    `Please wait \`${this.secondsUntil(
-                      cooldown,
-                      now
-                    )}\` before running this command again.`
-                  );
-
+                const embed = this.makeCooldownEmbed(cooldown, now);
                 message.channel.send(embed);
                 return;
               }
@@ -101,9 +113,7 @@ export default class extends Event {
               cmd.execute(message, args);
             } catch (error) {
               console.error(error);
-              message.channel.send(
-                'An error occured while trying to execute that command.'
-              );
+              message.channel.send(this.makeErrorEmbed());
             }
           }
         }
@@ -115,11 +125,7 @@ export default class extends Event {
     if (this.client.user === null) return;
     const now = Date.now();
     const commands = this.client.extraData.commands as CommandHandler;
-    const prefixes = [
-      `<@${this.client.user.id}> `,
-      `<@!${this.client.user.id}> `,
-      process.env.DEFAULT_PREFIX,
-    ];
+    const prefixes = [...this.mentions, process.env.DEFAULT_PREFIX];
 
     let toSplit = '';
     for (const prefix of prefixes) {
@@ -159,9 +165,7 @@ export default class extends Event {
         cmd.execute(message, args);
       } catch (error) {
         console.error(error);
-        message.channel.send(
-          'An error occured while trying to execute that command.'
-        );
+        message.channel.send(this.makeErrorEmbed());
       }
     }
   }
