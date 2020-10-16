@@ -9,13 +9,13 @@ export default class NucleusGuildMember extends GuildMember {
     // this.guild.id;
     // TODO - get perms from roles in guild
     const client = this.client as NucleusClient;
-    if (super.permissions.has('ADMINISTRATOR')) {
-      return new NucleusPermissions(client, NucleusPermissions.ALL);
+    if (super.guild.ownerID === this.id) {
+      return new NucleusPermissions(NucleusPermissions.ALL);
     }
     const guild = await client.database.getGuild(this.guild.id); // yes
     if (!guild) {
       // MAKE GUILD
-      return new NucleusPermissions(client, 0);
+      return new NucleusPermissions(0);
     } else if (typeof guild.permissions === 'object') {
       // calc perms
       const roleperms: NucleusPermissions[] = [];
@@ -23,9 +23,9 @@ export default class NucleusGuildMember extends GuildMember {
         const nrole = role as NucleusRole;
         roleperms.push(await nrole.fetchPermissions());
       });
-      return new NucleusPermissions(client, roleperms);
+      return new NucleusPermissions(roleperms);
     } else {
-      return new NucleusPermissions(client, 0);
+      return new NucleusPermissions(0);
     }
   }
 }

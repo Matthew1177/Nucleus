@@ -6,13 +6,16 @@ export default class NucleusRole extends Role {
   async fetchPermissions(): Promise<NucleusPermissions> {
     const client = super.client as NucleusClient;
     const guild = await client.database.getGuild(super.guild.id);
+    if (super.permissions.has('ADMINISTRATOR')) {
+      return new NucleusPermissions(NucleusPermissions.ALL);
+    }
     if (guild && guild.permissions) {
       const perms = guild.permissions as Record<string, number>;
-      return new NucleusPermissions(client, perms[super.id]);
+      return new NucleusPermissions(perms[super.id]);
     } else {
       client.database.resetGuild(super.guild.id);
     }
-    return new NucleusPermissions(client, 0);
+    return new NucleusPermissions(0);
   }
 }
 

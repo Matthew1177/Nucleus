@@ -17,7 +17,12 @@ export default class Command {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  execute(message: Message, args: string[]): void {
+  async execute(message: Message, args: string[]): Promise<void> {
     throw new Error('Unsupported operation.');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async check(message: Message): Promise<boolean> {
+    return false;
   }
 }

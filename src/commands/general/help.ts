@@ -5,7 +5,7 @@ import CommandHandler from '../../handlers/CommandHandler';
 export default class extends Command {
   cooldown = 3;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  execute(message: Message, args: Array<string>): void {
+  async execute(message: Message, args: Array<string>): Promise<void> {
     message.channel.send(this.helpEmbed(args[0]));
   }
 
