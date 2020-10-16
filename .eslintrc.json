@@ -1,4 +1,7 @@
 {
   "extends": "./node_modules/gts/",
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off"
+  }
 }
