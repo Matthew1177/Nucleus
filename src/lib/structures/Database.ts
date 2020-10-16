@@ -1,11 +1,22 @@
-import {MongoClient} from 'mongodb';
+import {
+  InsertOneWriteOpResult,
+  MongoClient,
+  UpdateQuery,
+  UpdateWriteOpResult,
+} from 'mongodb';
 import NucleusClient from '../extensions/NucleusClient';
 import {Snowflake, Collection} from 'discord.js';
 
-class CacheRecord {
-  data: Record<string, unknown>;
+type GuildRecord = {
+  id: string;
+  prefix: string;
+  permissions: Record<string, number>;
+};
+
+class CacheRecord<T> {
+  data: T;
   creation: number;
-  constructor(data: Record<string, unknown>) {
+  constructor(data: T) {
     this.data = data;
     this.creation = Date.now();
   }
@@ -13,9 +24,10 @@ class CacheRecord {
 
 export default class Database {
   client: NucleusClient;
-  guildCache = new Collection<Snowflake, CacheRecord>();
+  guildCache = new Collection<Snowflake, CacheRecord<GuildRecord>>();
   mongo: MongoClient | undefined;
 
+  static BASEGUILD = {prefix: process.env.DEFAULT_PREFIX!, permissions: {}};
   constructor(client: NucleusClient) {
     this.client = client;
 
@@ -47,11 +59,52 @@ export default class Database {
     return res;
   }
 
-  async insertGuild(obj: Record<string, unknown>): Promise<void> {
+  async insertGuild(
+    obj: GuildRecord
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<InsertOneWriteOpResult<any>> {
     const db = this.mongo!.db(process.env.DATABASE);
     const col = db.collection('guild_settings');
 
-    await col.insertOne(obj);
+    return await col.insertOne(obj);
+  }
+
+  async updateGuild(
+    id: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    update: UpdateQuery<any> | Partial<any>
+  ): Promise<UpdateWriteOpResult> {
+    const db = this.mongo!.db(process.env.DATABASE);
+    const col = db.collection('guild_settings');
+
+    return await col.updateOne({id}, update);
+  }
+
+  async replaceGuild(
+    obj: GuildRecord
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<InsertOneWriteOpResult<any>> {
+    const db = this.mongo!.db(process.env.DATABASE);
+    const col = db.collection('guild_settings');
+
+    await col.deleteOne({id: obj.id});
+    return await col.insertOne(obj);
+  }
+
+  async resetGuild(
+    // @ts-ignore
+    id: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<InsertOneWriteOpResult<any>> {
+    const guild = await this.getGuild(id);
+    // @ts-ignore
+    const base = this.constructor.BASEGUILD;
+    base.id = id;
+    if (!guild) {
+      return await this.insertGuild(base);
+    } else {
+      return await this.replaceGuild(base);
+    }
   }
 
   private sweepCache(lifetime: number): void {
