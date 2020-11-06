@@ -10,7 +10,7 @@ export default class extends Command {
   }
 
   async check(): Promise<boolean> {
-    return true; // TODO: Allow disabling
+    return true;
   }
 
   helpEmbed(name?: string): MessageEmbed {

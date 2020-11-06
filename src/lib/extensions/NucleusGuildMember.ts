@@ -6,8 +6,6 @@ import NucleusRole from './NucleusRole';
 
 export default class NucleusGuildMember extends GuildMember {
   async fetchPermissions(): Promise<NucleusPermissions> {
-    // this.guild.id;
-    // TODO - get perms from roles in guild
     const client = this.client as NucleusClient;
     if (super.permissions.has('ADMINISTRATOR')) {
       return new NucleusPermissions(NucleusPermissions.ALL);

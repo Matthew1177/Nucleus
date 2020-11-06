@@ -1,18 +1,15 @@
-import {Database, Event, NucleusClient} from '../lib/';
+import {Event, NucleusClient} from '../lib/';
 import {Snowflake, Collection, MessageEmbed, Message} from 'discord.js';
 import CommandHandler from '../handlers/CommandHandler';
-// TODO: Clean up
-const cooldowns: Collection<
-  string,
-  Collection<Snowflake, number>
-> = new Collection();
 
 export default class extends Event {
+  cooldowns: Collection<string, Collection<Snowflake, number>>;
   constructor(client: NucleusClient, name: string) {
     super(client, name);
     const arr = (this.client.extraData.commands as CommandHandler).array();
+    this.cooldowns = new Collection();
     arr.forEach(x => {
-      cooldowns.set(x.name, new Collection());
+      this.cooldowns.set(x.name, new Collection());
     });
 
     setInterval(
@@ -38,8 +35,8 @@ export default class extends Event {
     const lifetimeMs = lifetime * 1000;
     const now = Date.now();
 
-    for (const command in cooldowns) {
-      cooldowns.get(command)!.sweep(c => now - c > lifetimeMs);
+    for (const command in this.cooldowns) {
+      this.cooldowns.get(command)!.sweep(c => now - c > lifetimeMs);
     }
   }
 
@@ -93,7 +90,7 @@ export default class extends Event {
     if (!guildRecord) {
       // guild missing
       this.client.database.insertGuild({
-        ...Database.BASEGUILD,
+        ...this.client.database.baseGuild,
         id: message.guild!.id,
       });
       return;
@@ -121,11 +118,11 @@ export default class extends Event {
       if (!(await cmd.check(message))) {
         return;
       }
-      const cmdCooldown = cooldowns.get(cmd.name);
+      const cmdCooldown = this.cooldowns.get(cmd.name);
 
-      if (!cmdCooldown) cooldowns.set(cmd.name, new Collection());
+      if (!cmdCooldown) this.cooldowns.set(cmd.name, new Collection());
 
-      const cooldown = cooldowns.get(cmd.name)!.get(message.author.id);
+      const cooldown = this.cooldowns.get(cmd.name)!.get(message.author.id);
       if (cooldown) {
         if (now < cooldown) {
           const embed = this.makeCooldownEmbed(cooldown, now);
@@ -160,11 +157,11 @@ export default class extends Event {
       if (!(await cmd.check(message))) {
         return;
       }
-      const cmdCooldown = cooldowns.get(cmd.name);
+      const cmdCooldown = this.cooldowns.get(cmd.name);
 
-      if (!cmdCooldown) cooldowns.set(cmd.name, new Collection());
+      if (!cmdCooldown) this.cooldowns.set(cmd.name, new Collection());
 
-      const cooldown = cooldowns.get(cmd.name)!.get(message.author.id);
+      const cooldown = this.cooldowns.get(cmd.name)!.get(message.author.id);
       if (cooldown) {
         if (now < cooldown) {
           const embed = this.makeCooldownEmbed(cooldown, now);
