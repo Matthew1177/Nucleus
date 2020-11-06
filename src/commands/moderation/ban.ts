@@ -9,7 +9,7 @@ export default class extends Command {
       const mem = msg.member as NucleusGuildMember;
       if (msg.member) {
         const perms = await mem.fetchPermissions();
-        if (perms.has('KICK_MEMBERS')) {
+        if (perms.has('BAN_MEMBERS')) {
           return true;
         }
       }
@@ -27,20 +27,31 @@ export default class extends Command {
             message.member!.guild.owner === message.member!) &&
           user.guild.owner !== user
         )
-          if (user.kickable)
+          if (user.bannable)
             user
-              .kick(
-                `Responsible user: @${message.author.tag} (${message.author.id})`
-              )
+              .ban({
+                reason: `Responsible user: @${message.author.tag} (${message.author.id})`,
+              })
               .then(() => {
                 message.channel.send(
-                  `'Kicked @${user.user.tag} (${user.user.id})`
+                  `Banned @${user.user.tag} (\`${user.user.id}\`)`
                 );
               });
           else
             message.channel.send(
-              "I am unable to kick that user, please move my role higher than that user's highest role."
+              "I am unable to ban that user, please move my role higher than that user's highest role."
             );
+      } else {
+        message
+          .guild!.members.ban(numb, {
+            reason: `Responsible user: @${message.author.tag} (${message.author.id})`,
+          })
+          .then(() => {
+            message.channel.send(`Banned ${numb}`);
+          })
+          .catch(() => {
+            message.channel.send(`Unable to ban \`${numb}\`.`);
+          });
       }
     }
   }
