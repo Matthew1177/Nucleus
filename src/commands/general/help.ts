@@ -3,10 +3,14 @@ import {MessageEmbed, Message} from 'discord.js';
 import CommandHandler from '../../handlers/CommandHandler';
 
 export default class extends Command {
-  cooldown = 3;
+  cooldown = 0;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async execute(message: Message, args: Array<string>): Promise<void> {
     message.channel.send(this.helpEmbed(args[0]));
+  }
+
+  async check(): Promise<boolean> {
+    return true; // TODO: Allow disabling
   }
 
   helpEmbed(name?: string): MessageEmbed {

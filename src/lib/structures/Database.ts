@@ -91,22 +91,6 @@ export default class Database {
     return await col.insertOne(obj);
   }
 
-  async resetGuild(
-    // @ts-ignore
-    id: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Promise<InsertOneWriteOpResult<any>> {
-    const guild = await this.getGuild(id);
-    // @ts-ignore
-    const base = this.constructor.BASEGUILD;
-    base.id = id;
-    if (!guild) {
-      return await this.insertGuild(base);
-    } else {
-      return await this.replaceGuild(base);
-    }
-  }
-
   private sweepCache(lifetime: number): void {
     if (lifetime <= 0) {
       return;

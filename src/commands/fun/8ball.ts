@@ -27,7 +27,11 @@ export default class extends Command {
     'Very doubtful.',
   ];
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  execute(message: Message, args: Array<string>): void {
+  async check(msg: Message): Promise<boolean> {
+    return true; // TODO: add a perm thats 'use fun commands'
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async execute(message: Message, args: Array<string>): Promise<void> {
     const rand = Math.floor(Math.random() * this.responses.length);
     const embed = new MessageEmbed()
       .setColor(rand < 10 ? 0x5cb85c : rand < 15 ? 0xf0ad4e : 0xd9534f)

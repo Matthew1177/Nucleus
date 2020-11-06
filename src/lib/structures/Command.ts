@@ -8,8 +8,6 @@ export default class Command {
   cooldown = 3;
   description: string | null = null;
   usage: string | null = null;
-  dm = true;
-  guild = true;
 
   constructor(client: NucleusClient, name: string) {
     this.client = client;

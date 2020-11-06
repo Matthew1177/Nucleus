@@ -5,7 +5,7 @@ import Command from './structures/Command';
 import Database from './structures/Database';
 import Event from './structures/Event';
 import NucleusPermissions from './structures/NucleusPermissions';
-
+// TODO: remove all process.env from lib
 export {
   // ext
   NucleusClient,

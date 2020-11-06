@@ -2,7 +2,7 @@ import {Command, NucleusClient} from '../lib';
 import {Collection} from 'discord.js';
 import {readdirSync} from 'fs';
 import {basename} from 'path';
-
+// TODO: make part of lib
 export default class CommandHandler extends Collection<string, Command> {
   modules: Collection<string, Collection<string, Command>> = new Collection();
   client: NucleusClient;

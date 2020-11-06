@@ -9,7 +9,7 @@ export default class NucleusGuildMember extends GuildMember {
     // this.guild.id;
     // TODO - get perms from roles in guild
     const client = this.client as NucleusClient;
-    if (super.guild.ownerID === this.id) {
+    if (super.permissions.has('ADMINISTRATOR')) {
       return new NucleusPermissions(NucleusPermissions.ALL);
     }
     const guild = await client.database.getGuild(this.guild.id); // yes
