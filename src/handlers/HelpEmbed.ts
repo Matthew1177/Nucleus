@@ -21,11 +21,12 @@ export default class HelpEmbed extends MessageEmbed {
           this.setDescription('No description specified.');
         }
       }
-    }
-    this.setDescription(
-      `**Dashboard:** (planned)
+    } else {
+      this.setDescription(
+        `**Dashboard:** (planned)
         **Commands:** (link)
         **Donate:** (link)`
-    ).setColor(0x23272a);
+      ).setColor(0x23272a);
+    }
   }
 }
