@@ -1,5 +1,4 @@
 import {Role, Structures} from 'discord.js';
-import Database from '../structures/Database';
 import NucleusPermissions from '../structures/NucleusPermissions';
 import NucleusClient from './NucleusClient';
 
@@ -15,7 +14,7 @@ export default class NucleusRole extends Role {
       // deal with missing attrs
       if (!guild) {
         client.database.insertGuild({
-          ...Database.BASEGUILD,
+          ...client.database.baseGuild,
           id: this.guild.id,
         });
       } else {

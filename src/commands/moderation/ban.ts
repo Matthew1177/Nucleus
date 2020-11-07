@@ -1,5 +1,6 @@
 import {Command, NucleusGuildMember} from '../../lib';
 import {Message} from 'discord.js';
+import HelpEmbed from '../../handlers/HelpEmbed';
 
 export default class extends Command {
   cooldown = 1;
@@ -17,6 +18,9 @@ export default class extends Command {
     return false;
   }
   async execute(message: Message, args: Array<string>): Promise<void> {
+    if (!args[0]) {
+      message.channel.send(new HelpEmbed(this.client, 'ban'));
+    }
     const numb = args[0].match(/\d/g)?.join('');
     if (numb) {
       const user = message.guild!.members.cache.get(numb);
@@ -44,10 +48,10 @@ export default class extends Command {
       } else {
         message
           .guild!.members.ban(numb, {
-            reason: `Responsible user: @${message.author.tag} (${message.author.id})`,
+            reason: `Responsible user: @${message.author.tag} (\`${message.author.id}\`)`,
           })
           .then(() => {
-            message.channel.send(`Banned ${numb}`);
+            message.channel.send(`Banned \`${numb}\``);
           })
           .catch(() => {
             message.channel.send(`Unable to ban \`${numb}\`.`);

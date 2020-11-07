@@ -1,42 +1,14 @@
 import {Command} from '../../lib';
-import {MessageEmbed, Message} from 'discord.js';
-import CommandHandler from '../../handlers/CommandHandler';
-
+import {Message} from 'discord.js';
+import HelpEmbed from '../../handlers/HelpEmbed';
 export default class extends Command {
   cooldown = 0;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async execute(message: Message, args: Array<string>): Promise<void> {
-    message.channel.send(this.helpEmbed(args[0]));
+    message.channel.send(new HelpEmbed(this.client, args[0]));
   }
 
   async check(): Promise<boolean> {
     return true;
-  }
-
-  helpEmbed(name?: string): MessageEmbed {
-    if (name && name.toLowerCase().trim() !== 'help') {
-      const commands = <CommandHandler>this.client.extraData.commands;
-      const command = commands.getCommand(name);
-      if (command) {
-        const embed = new MessageEmbed().setColor(0x23272a);
-        embed.setTitle(
-          command.name.charAt(0).toUpperCase() + command.name.slice(1)
-        );
-        if (command.description && command.description.trim()) {
-          embed.setDescription(command.description);
-        } else {
-          embed.setDescription('No description specified.');
-        }
-        return embed;
-      }
-    }
-    const embed = new MessageEmbed()
-      .setDescription(
-        `**Dashboard:** (planned)
-        **Commands:** (link)
-        **Donate:** (link)`
-      )
-      .setColor(0x23272a);
-    return embed;
   }
 }
