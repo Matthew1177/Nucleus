@@ -89,21 +89,26 @@ export default class extends Event {
     // deal with missing attr
     if (!guildRecord) {
       // guild missing
-      this.client.database.insertGuild({
+      await this.client.database.insertGuild({
         ...this.client.database.baseGuild,
         id: message.guild!.id,
       });
+      this.handleGuild(message);
       return;
     } else if (!guildRecord.prefix) {
       // prefix missing
-      this.client.database.updateGuild(message.guild!.id, {
+      await this.client.database.updateGuild(message.guild!.id, {
         $set: {prefix: process.env.DEFAULT_PREFIX!},
       });
+      this.handleGuild(message);
+      return;
     } else if (!guildRecord.permissions) {
       // perms missing
-      this.client.database.updateGuild(message.guild!.id, {
+      await this.client.database.updateGuild(message.guild!.id, {
         $set: {permissions: {}},
       });
+      this.handleGuild(message);
+      return;
     }
     // rest of code
     const prefixes = [
