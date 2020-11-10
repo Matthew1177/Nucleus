@@ -4,7 +4,8 @@ import HelpEmbed from '../../handlers/HelpEmbed';
 
 export default class extends Command {
   cooldown = 1;
-
+  description = 'Kicks a member.';
+  usage = '!kick <id | mention>';
   async check(msg: Message): Promise<boolean> {
     if (msg.channel.type !== 'dm') {
       const mem = msg.member as NucleusGuildMember;
@@ -19,12 +20,12 @@ export default class extends Command {
   }
   async execute(message: Message, args: Array<string>): Promise<void> {
     if (!args[0]) {
-      message.channel.send(new HelpEmbed(this.client, 'ban'));
+      message.channel.send(new HelpEmbed(this.client, 'kick'));
       return;
     }
     const numbs = args[0].match(/\d/g);
     if (!numbs) {
-      message.channel.send(new HelpEmbed(this.client, 'ban'));
+      message.channel.send(new HelpEmbed(this.client, 'kick'));
       return;
     }
     const numb = numbs.join('');
