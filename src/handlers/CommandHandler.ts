@@ -1,3 +1,5 @@
+// Deprecated
+
 import {Command, NucleusClient} from '../lib';
 import {Collection} from 'discord.js';
 import {readdirSync} from 'fs';

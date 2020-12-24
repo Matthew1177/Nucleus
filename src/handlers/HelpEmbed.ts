@@ -1,3 +1,5 @@
+// Deprecated
+
 import {MessageEmbed} from 'discord.js';
 import {NucleusClient} from '../lib';
 import CommandHandler from './CommandHandler';
@@ -15,11 +17,7 @@ export default class HelpEmbed extends MessageEmbed {
         this.setTitle(
           command.name.charAt(0).toUpperCase() + command.name.slice(1)
         );
-        if (command.description && command.description.trim()) {
-          this.setDescription(command.description);
-        } else {
-          this.setDescription('No description specified.');
-        }
+        // TODO: add details
       }
     } else {
       this.setDescription(

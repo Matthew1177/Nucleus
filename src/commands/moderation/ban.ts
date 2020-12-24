@@ -54,7 +54,7 @@ export default class extends Command {
       } else {
         message
           .guild!.members.ban(numb, {
-            reason: `Responsible user: @${message.author.tag} (\`${message.author.id}\`)`,
+            reason: `Responsible user: @${message.author.tag} (${message.author.id})`,
           })
           .then(() => {
             message.channel.send(`Banned \`${numb}\``);
