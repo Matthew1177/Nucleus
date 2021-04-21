@@ -1,8 +1,8 @@
-import {Client, ClientEvents} from 'discord.js';
+import {Client} from 'discord.js';
 
 export default abstract class Event {
   client: Client;
-  abstract name: keyof ClientEvents;
+  abstract name: string;
   once = false;
 
   constructor(client: Client) {
