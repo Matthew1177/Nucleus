@@ -1,17 +1,13 @@
 require('dotenv').config();
 
+import MessageEvent from './events/MessageEvent';
 import NucleusClient from './extensions/NucleusClient';
+import LoadExtensions from './utils/LoadExtensions';
 
-const client = new NucleusClient({
-  ws: {
-    intents: [
-      'GUILDS',
-      'GUILD_MEMBERS',
-      'GUILD_BANS',
-      'GUILD_MESSAGES',
-      'DIRECT_MESSAGES',
-    ],
-  },
-});
+LoadExtensions();
+
+const client = new NucleusClient();
+
+client.registerEvent(new MessageEvent(client));
 
 client.login(process.env.TOKEN);
