@@ -9,6 +9,5 @@ export default abstract class Event {
     this.client = client;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   abstract execute(...args: unknown[]): void;
 }
