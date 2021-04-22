@@ -1,11 +1,11 @@
-import {Client} from 'discord.js';
+import NucleusClient from '../extensions/NucleusClient';
 
 export default abstract class Event {
-  client: Client;
+  client: NucleusClient;
   abstract name: string;
   once = false;
 
-  constructor(client: Client) {
+  constructor(client: NucleusClient) {
     this.client = client;
   }
 

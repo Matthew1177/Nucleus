@@ -22,6 +22,6 @@ export default class NucleusClient extends Client {
   }
 
   registerEvent(event: Event) {
-    super[event.once ? 'once' : 'on'](event.name, event.execute);
+    super[event.once ? 'once' : 'on'](event.name, event.execute.bind(event));
   }
 }
