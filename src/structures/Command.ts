@@ -1,4 +1,4 @@
-import {Client} from 'discord.js';
+import {Client, Message} from 'discord.js';
 import NucleusPermissions from './NucleusPermissions';
 
 export default abstract class Command {
@@ -6,6 +6,9 @@ export default abstract class Command {
   abstract name: string;
   aliases: string[] = [];
   premium = false;
+  /**
+   * Will only be checked if the command is run on a guild.
+   */
   permissions: NucleusPermissions = new NucleusPermissions(0);
   dm = true;
   guild = true;
@@ -14,5 +17,5 @@ export default abstract class Command {
     this.client = client;
   }
 
-  abstract execute(...args: unknown[]): void;
+  abstract execute(message: Message, args: string[]): void;
 }

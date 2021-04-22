@@ -1,5 +1,6 @@
 import {Collection, Message} from 'discord.js';
 import NucleusGuild from '../extensions/NucleusGuild';
+import NucleusGuildMember from '../extensions/NucleusGuildMember';
 import Command from '../structures/Command';
 import Event from '../structures/Event';
 
@@ -13,6 +14,19 @@ export default class CommandHandler extends Event {
     const prefix = await this.getPrefix(message);
     if (prefix !== undefined) {
       const args = message.content.substring(prefix.length).split(' ');
+      const command = this.getCommand(args[0]);
+
+      if (!command) return;
+
+      if (command.guild && message.channel.type !== 'dm') {
+        // guild
+        const member = message.member as NucleusGuildMember;
+        if (await member.hasNucleusPermission(command.permissions))
+          command.execute(message, args);
+      } else {
+        // dm
+        command.execute(message, args);
+      }
     }
   }
 
