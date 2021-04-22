@@ -1,0 +1,2 @@
+export const GUILD_SETTINGS_LIFETIME = 5 * 60 * 1000;
+export const PERMISSIONS_SETTINGS_LIFETIME = 5 * 60 * 1000;
