@@ -1,4 +1,5 @@
 import {Collection, Message} from 'discord.js';
+import InvalidArgumentsError from '../errors/InvalidArgumentsError';
 import NucleusGuild from '../extensions/NucleusGuild';
 import NucleusGuildMember from '../extensions/NucleusGuildMember';
 import Command from '../structures/Command';
@@ -21,11 +22,12 @@ export default class CommandHandler extends Event {
       if (command.guild && message.channel.type !== 'dm') {
         // guild
         const member = message.member as NucleusGuildMember;
-        if (await member.hasNucleusPermission(command.permissions))
-          command.execute(message, args);
-      } else {
+        if (await member.hasNucleusPermission(command.permissions)) {
+          this.executeCommand(command, prefix, message, args);
+        }
+      } else if (command.dm && message.channel.type === 'dm') {
         // dm
-        command.execute(message, args);
+        this.executeCommand(command, prefix, message, args);
       }
     }
   }
@@ -36,6 +38,7 @@ export default class CommandHandler extends Event {
   }
 
   getCommand(name: string): Command | undefined {
+    name = name.toLowerCase();
     if (this.commands.has(name)) return this.commands.get(name);
 
     return this.commands.find(cmd => cmd.aliases.includes(name));
@@ -57,5 +60,26 @@ export default class CommandHandler extends Event {
       }
     }
     return undefined;
+  }
+
+  private async executeCommand(
+    command: Command,
+    prefix: string,
+    message: Message,
+    args: string[]
+  ) {
+    try {
+      await command.execute(message, args);
+    } catch (e) {
+      if (e instanceof InvalidArgumentsError) {
+        message.reply(
+          'Invalid Arguments. Run `' +
+            prefix +
+            'help ' +
+            args[0] +
+            '` for more information.'
+        );
+      }
+    }
   }
 }
