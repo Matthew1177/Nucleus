@@ -1,4 +1,5 @@
-import {Collection, Message} from 'discord.js';
+import {Collection, Message, MessageEmbed} from 'discord.js';
+import {COLORS} from '../Constants';
 import InvalidArgumentsError from '../errors/InvalidArgumentsError';
 import NucleusGuild from '../extensions/NucleusGuild';
 import NucleusGuildMember from '../extensions/NucleusGuildMember';
@@ -23,11 +24,11 @@ export default class CommandHandler extends Event {
         // guild
         const member = message.member as NucleusGuildMember;
         if (await member.hasNucleusPermission(command.permissions)) {
-          this.executeCommand(command, prefix, message, args);
+          this.executeCommand(command, message, args);
         }
       } else if (command.dm && message.channel.type === 'dm') {
         // dm
-        this.executeCommand(command, prefix, message, args);
+        this.executeCommand(command, message, args);
       }
     }
   }
@@ -64,7 +65,6 @@ export default class CommandHandler extends Event {
 
   private async executeCommand(
     command: Command,
-    prefix: string,
     message: Message,
     args: string[]
   ) {
@@ -72,14 +72,32 @@ export default class CommandHandler extends Event {
       await command.execute(message, args);
     } catch (e) {
       if (e instanceof InvalidArgumentsError) {
-        message.reply(
-          'Invalid Arguments. Run `' +
-            prefix +
-            'help ' +
-            args[0] +
-            '` for more information.'
-        );
+        message.channel.send(this.helpEmbed(command));
       } else console.error(e);
     }
+  }
+
+  helpEmbed(command: Command | undefined) {
+    if (command)
+      return new MessageEmbed()
+        .setTitle(
+          command.name[0].toUpperCase() + command.name.substring(1) + ' Command'
+        )
+        .setColor(COLORS.DARK_BUT_NOT_BLACK)
+        .setDescription(
+          `**Description**: ${command.description}\n**Usage:** ${command.usage}\n**Example:** ${command.example}`
+        );
+    else
+      return new MessageEmbed()
+        .setColor(COLORS.DARK_BUT_NOT_BLACK)
+        .setTitle('Kernel - An advanced moderation bot')
+        .setDescription('')
+        .addField(
+          'Resources',
+          `**[Invite](https://google.com)**
+          **[Commands](https://google.com)**
+          **[Dashboard](https://google.com)**
+          **[Premium](https://google.com)**`
+        );
   }
 }

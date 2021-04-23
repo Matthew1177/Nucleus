@@ -10,6 +10,11 @@ export default class KickCommand extends Command {
   guild = true;
   dm = false;
 
+  description = 'Kicks a member';
+
+  usage = '!kick [user] (reason) - Kicks user for a optional reason';
+  example = '\n!kick @Math LEAVE!\n!kick @Math!';
+
   permissions = new NucleusPermissions('KICK_MEMBERS');
 
   async execute(message: Message, args: string[]) {
@@ -24,13 +29,32 @@ export default class KickCommand extends Command {
           message.reply("I can't kick the server owner.");
           return;
         }
+        if (
+          message.member!.roles.highest.comparePositionTo(
+            member.roles.highest
+          ) <= 0 &&
+          message.author.id !== message.guild!.ownerID
+        ) {
+          message.reply(
+            'Your highest role must be above the user you wish to punish.'
+          );
+          return;
+        }
         if (member.kickable) {
           args.pop();
           args.pop();
-          member.kick(args.join(' '));
+          member
+            .kick(args.join(' '))
+            .then(() => {
+              message.reply(member.user.tag + ' kicked.');
+            })
+            .catch(e => {
+              console.error(e);
+              message.reply('Unable to kick that member.');
+            });
         } else {
           message.reply(
-            "I can't kick that user. Pleas make sure I have `KICK_MEMBERS` permission and have a higher role than that user."
+            "I can't kick that user. Please make sure I have `KICK_MEMBERS` permission and have a higher role than that user."
           );
           return;
         }

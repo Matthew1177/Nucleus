@@ -5,6 +5,7 @@ const FLAGS = {
   BAN_MEMBERS: 1 << 1,
   MUTE_MEMBERS: 1 << 2,
   PURGE_MESSAGES: 1 << 3,
+  WARN_MEMBERS: 1 << 4,
 };
 
 export type NucleusPermissionResolvable = BitFieldResolvable<

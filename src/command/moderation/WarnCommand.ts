@@ -4,19 +4,18 @@ import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
 import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
-export default class BanCommand extends Command {
-  name = 'ban';
-
-  description = 'Permanently ban a member';
-
-  usage =
-    '!ban [user] (reason) - Permanently bans a user for an optional reason';
-  example = '\n!ban @Silk Begone forever!\n!ban @Silk';
+export default class WarnCommand extends Command {
+  name = 'warn';
 
   guild = true;
   dm = false;
 
-  permissions = new NucleusPermissions('BAN_MEMBERS');
+  description = 'Warns a member';
+
+  usage = '!warn [user] (reason)';
+  example = '\n!warn @Math fix your bot\n!warn @Math';
+
+  permissions = new NucleusPermissions('WARN_MEMBERS');
 
   async execute(message: Message, args: string[]) {
     if (args[1]) {
@@ -27,7 +26,7 @@ export default class BanCommand extends Command {
       const member = message.guild!.members.cache.get(id);
       if (member) {
         if (member.id === message.guild!.ownerID) {
-          message.reply("I can't ban the server owner.");
+          message.reply("I can't warn the server owner.");
           return;
         }
         if (
@@ -37,29 +36,14 @@ export default class BanCommand extends Command {
           message.author.id !== message.guild!.ownerID
         ) {
           message.reply(
-            'Your highest role must be above the user you wish to punish.'
+            'Your highest role must be above the user you wish to warn.'
           );
           return;
         }
-        if (member.bannable) {
-          args.pop();
-          args.pop();
 
-          member
-            .ban({reason: args.join(' '), days: 1})
-            .then(() => {
-              message.reply(member.user.tag + ' banned.');
-            })
-            .catch(e => {
-              console.error(e);
-              message.reply('Unable to ban that member.');
-            });
-        } else {
-          message.reply(
-            "I can't ban that user. Please make sure I have `BAN_MEMBERS` permission and have a higher role than that user."
-          );
-          return;
-        }
+        args.pop();
+        args.pop();
+        member.kick(args.join(' '));
       } else {
         message.reply("I can't find that user.");
         return;

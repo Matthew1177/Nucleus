@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+import HelpCommand from './command/general/HelpCommand';
 import BanCommand from './command/moderation/BanCommand';
 import KickCommand from './command/moderation/KickCommand';
 import CommandHandler from './events/CommandHandler';
@@ -14,6 +15,7 @@ const commandHandler = new CommandHandler(client);
 
 commandHandler.registerCommand(new BanCommand(client));
 commandHandler.registerCommand(new KickCommand(client));
+commandHandler.registerCommand(new HelpCommand(client, commandHandler));
 
 client.registerEvent(commandHandler);
 

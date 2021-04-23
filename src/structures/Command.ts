@@ -12,6 +12,9 @@ export default abstract class Command {
   permissions: NucleusPermissions = new NucleusPermissions(0);
   dm = true;
   guild = true;
+  abstract description: string;
+  abstract usage: string;
+  abstract example: string;
 
   constructor(client: Client) {
     this.client = client;
