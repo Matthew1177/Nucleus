@@ -2,12 +2,15 @@ import {Message} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
 import Command from '../../structures/Command';
+import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class KickCommand extends Command {
   name = 'kick';
 
   guild = true;
   dm = false;
+
+  permissions = new NucleusPermissions('KICK_MEMBERS');
 
   async execute(message: Message, args: string[]) {
     if (args[1]) {

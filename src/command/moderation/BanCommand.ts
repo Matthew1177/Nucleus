@@ -2,12 +2,15 @@ import {Message} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
 import Command from '../../structures/Command';
+import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class BanCommand extends Command {
   name = 'ban';
 
   guild = true;
   dm = false;
+
+  permissions = new NucleusPermissions('BAN_MEMBERS');
 
   async execute(message: Message, args: string[]) {
     if (args[1]) {

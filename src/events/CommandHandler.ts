@@ -79,7 +79,7 @@ export default class CommandHandler extends Event {
             args[0] +
             '` for more information.'
         );
-      }
+      } else console.error(e);
     }
   }
 }

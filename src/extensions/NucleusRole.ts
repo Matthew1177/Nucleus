@@ -33,9 +33,16 @@ export default class NucleusRole extends Role {
         'INSERT INTO public.guild_role_permissions(id, guild_id, bitset) VALUES ($1, $2, $3);',
         [BigInt(this.id), BigInt(this.guild.id), bitset]
       );
-      return new NucleusRolePermissions(bitset, this);
+      this.cachedPermissions = new NucleusRolePermissions(bitset, this);
+      this.permissionsFetchedTimestamp = Date.now();
+      return this.cachedPermissions;
     } else {
-      return new NucleusRolePermissions(res.rows[0].bitset, this);
+      this.cachedPermissions = new NucleusRolePermissions(
+        Number(res.rows[0].bitset),
+        this
+      );
+      this.permissionsFetchedTimestamp = Date.now();
+      return this.cachedPermissions;
     }
   }
 }
