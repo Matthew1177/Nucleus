@@ -1,6 +1,7 @@
-import {Collection, Message, MessageEmbed} from 'discord.js';
+import {Collection, Constructable, Message, MessageEmbed} from 'discord.js';
 import {COLORS} from '../Constants';
 import InvalidArgumentsError from '../errors/InvalidArgumentsError';
+import NucleusClient from '../extensions/NucleusClient';
 import NucleusGuild from '../extensions/NucleusGuild';
 import NucleusGuildMember from '../extensions/NucleusGuildMember';
 import Command from '../structures/Command';
@@ -10,10 +11,15 @@ export default class CommandHandler extends Event {
   readonly name = 'message';
   commands = new Collection<string, Command>();
 
+  constructor(client: NucleusClient) {
+    super(client);
+  }
+
   async execute(message: Message) {
     if (!this.client.user) return;
     if (message.author.bot) return;
     if (
+      message.channel.type !== 'dm' &&
       !message.guild?.me
         ?.permissionsIn(message.channel)
         .has(['SEND_MESSAGES', 'VIEW_CHANNEL'])
@@ -30,7 +36,22 @@ export default class CommandHandler extends Event {
         // guild
         const member = message.member as NucleusGuildMember;
         if (await member.hasNucleusPermission(command.permissions)) {
-          this.executeCommand(command, message, args);
+          if (
+            message
+              .guild!.me!.permissionsIn(message.channel)
+              .has(command.botPermissions)
+          ) {
+            this.executeCommand(command, message, args);
+          } else {
+            message.channel.send(
+              'This command cannot be executed because permissions are missing. The required permissions are: `' +
+                command.botPermissions
+                  .toArray()
+                  .toString()
+                  .replace(',', '`, `') +
+                '`.'
+            );
+          }
         }
       } else if (command.dm && message.channel.type === 'dm') {
         // dm
@@ -39,9 +60,14 @@ export default class CommandHandler extends Event {
     }
   }
 
-  registerCommand(command: Command) {
+  registerCommand<T extends Command>(
+    commandClass: Constructable<T>,
+    ...args: unknown[]
+  ): T {
+    const command = new commandClass(this.client, ...args);
     if (this.commands.has(command.name)) throw new Error('Duplicate command');
     this.commands.set(command.name, command);
+    return command;
   }
 
   getCommand(name: string): Command | undefined {

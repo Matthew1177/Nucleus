@@ -12,13 +12,11 @@ LoadExtensions();
 
 const client = new NucleusClient();
 
-const commandHandler = new CommandHandler(client);
+const commandHandler = client.registerEvent(CommandHandler);
 
-commandHandler.registerCommand(new BanCommand(client));
-commandHandler.registerCommand(new KickCommand(client));
-commandHandler.registerCommand(new WarnCommand(client));
-commandHandler.registerCommand(new HelpCommand(client, commandHandler));
-
-client.registerEvent(commandHandler);
+commandHandler.registerCommand(BanCommand);
+commandHandler.registerCommand(KickCommand);
+commandHandler.registerCommand(WarnCommand);
+commandHandler.registerCommand(HelpCommand, commandHandler);
 
 client.login(process.env.TOKEN);

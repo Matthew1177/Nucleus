@@ -1,4 +1,4 @@
-import {Message} from 'discord.js';
+import {Message, Permissions} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
 import NucleusGuild, {ModerationTypes} from '../../extensions/NucleusGuild';
@@ -7,6 +7,7 @@ import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class BanCommand extends Command {
+  readonly botPermissions = new Permissions('BAN_MEMBERS');
   readonly name = 'ban';
   readonly aliases = ['pban', 'permban'];
 
@@ -51,7 +52,11 @@ export default class BanCommand extends Command {
           member
             .ban({reason, days: 1})
             .then(() => {
-              message.reply(member.user.tag + ' banned.');
+              message.reply(
+                member.user.tag +
+                  ' banned. Reason: ' +
+                  (reason || 'Unspecified.')
+              );
               const guild = member.guild as NucleusGuild;
               guild.addModLog({
                 moderator: message.member! as NucleusGuildMember,
@@ -67,13 +72,17 @@ export default class BanCommand extends Command {
             });
         } else {
           message.reply(
-            "I can't ban that user. Please make sure I have `BAN_MEMBERS` permission and have a higher role than that user."
+            "I can't kick that user. Please make sure I have a higher role than that user."
           );
           return;
         }
       } else {
         message
           .guild!.members.ban(id, {days: 1, reason})
+          .catch(e => {
+            console.error(e);
+            message.reply('Unable to ban that member.');
+          })
           .then(() => {
             message.channel.send(
               `<@${id}>` + ' banned. Reason: ' + (reason || 'Unspecified.')
@@ -86,10 +95,6 @@ export default class BanCommand extends Command {
               case_type: ModerationTypes.Ban,
               duration: undefined,
             });
-          })
-          .catch(e => {
-            console.error(e);
-            message.reply('Unable to ban that member.');
           });
         return;
       }

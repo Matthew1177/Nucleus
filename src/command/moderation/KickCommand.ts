@@ -1,4 +1,4 @@
-import {Message} from 'discord.js';
+import {Message, Permissions} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
 import NucleusGuild, {ModerationTypes} from '../../extensions/NucleusGuild';
@@ -7,6 +7,7 @@ import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class KickCommand extends Command {
+  readonly botPermissions = new Permissions('KICK_MEMBERS');
   readonly name = 'kick';
 
   readonly guild = true;
@@ -42,12 +43,16 @@ export default class KickCommand extends Command {
           );
           return;
         }
-        if (member.bannable) {
+        if (member.kickable) {
           args.shift();
           args.shift();
           const reason = args.join(' ');
           member
             .kick(reason)
+            .catch(e => {
+              console.error(e);
+              message.reply('Unable to kick that member.');
+            })
             .then(() => {
               message.channel.send(
                 `<@${id}>` + ' kicked. Reason: ' + (reason || 'Unspecified.')
@@ -60,14 +65,10 @@ export default class KickCommand extends Command {
                 case_type: ModerationTypes.Kick,
                 duration: undefined,
               });
-            })
-            .catch(e => {
-              console.error(e);
-              message.reply('Unable to kick that member.');
             });
         } else {
           message.reply(
-            "I can't ban that user. Please make sure I have `KICK_MEMBERS` permission and have a higher role than that user."
+            "I can't kick that user. Please make sure I have a higher role than that user."
           );
           return;
         }

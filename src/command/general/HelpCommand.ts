@@ -1,9 +1,10 @@
-import {Client, Message} from 'discord.js';
+import {Client, Message, Permissions} from 'discord.js';
 import CommandHandler from '../../events/CommandHandler';
 import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class HelpCommand extends Command {
+  readonly botPermissions = new Permissions(0);
   readonly permissions: NucleusPermissions = new NucleusPermissions(0);
   readonly dm = true;
   readonly guild = true;
@@ -15,7 +16,6 @@ export default class HelpCommand extends Command {
 
   constructor(client: Client, readonly commandHandler: CommandHandler) {
     super(client);
-    this.commandHandler = commandHandler;
   }
 
   execute(message: Message, args: string[]): void {

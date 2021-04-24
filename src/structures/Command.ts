@@ -1,4 +1,4 @@
-import {Client, Message} from 'discord.js';
+import {Client, Message, Permissions} from 'discord.js';
 import NucleusPermissions from './NucleusPermissions';
 
 export default abstract class Command {
@@ -14,6 +14,7 @@ export default abstract class Command {
   abstract readonly description: string;
   abstract readonly usage: string;
   abstract readonly example: string;
+  abstract readonly botPermissions: Permissions;
 
   constructor(readonly client: Client) {}
 

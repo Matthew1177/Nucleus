@@ -1,4 +1,4 @@
-import {Message} from 'discord.js';
+import {Message, Permissions} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
 import NucleusGuild, {ModerationTypes} from '../../extensions/NucleusGuild';
@@ -7,6 +7,7 @@ import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class WarnCommand extends Command {
+  readonly botPermissions = new Permissions(0);
   readonly name = 'warn';
 
   readonly guild = true;
@@ -46,7 +47,9 @@ export default class WarnCommand extends Command {
         args.shift();
         const reason = args.join(' ');
 
-        message.reply(member.user.tag + ' warned.');
+        message.reply(
+          member.user.tag + ' warned. Reason: ' + (reason || 'Unspecified.')
+        );
         const guild = member.guild as NucleusGuild;
         guild.addModLog({
           moderator: message.member! as NucleusGuildMember,
