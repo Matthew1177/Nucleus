@@ -1,6 +1,8 @@
 import {Message} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
+import NucleusGuild, {ModerationTypes} from '../../extensions/NucleusGuild';
+import NucleusGuildMember from '../../extensions/NucleusGuildMember';
 import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
@@ -12,10 +14,10 @@ export default class WarnCommand extends Command {
 
   description = 'Warns a member';
 
-  usage = '!warn [user] (reason)';
-  example = '\n!warn @Math fix your bot\n!warn @Math';
+  usage = '!warn [user] (reason) - Warns user for a optional reason';
+  example = '\n!warn @Math LEAVE!\n!warn @Math';
 
-  permissions = new NucleusPermissions('WARN_MEMBERS');
+  permissions = new NucleusPermissions('KICK_MEMBERS');
 
   async execute(message: Message, args: string[]) {
     if (args[1]) {
@@ -26,7 +28,7 @@ export default class WarnCommand extends Command {
       const member = message.guild!.members.cache.get(id);
       if (member) {
         if (member.id === message.guild!.ownerID) {
-          message.reply("I can't warn the server owner.");
+          message.reply("I can't kick the server owner.");
           return;
         }
         if (
@@ -36,14 +38,23 @@ export default class WarnCommand extends Command {
           message.author.id !== message.guild!.ownerID
         ) {
           message.reply(
-            'Your highest role must be above the user you wish to warn.'
+            'Your highest role must be above the user you wish to punish.'
           );
           return;
         }
+        args.shift();
+        args.shift();
+        const reason = args.join(' ');
 
-        args.pop();
-        args.pop();
-        member.kick(args.join(' '));
+        message.reply(member.user.tag + ' warned.');
+        const guild = member.guild as NucleusGuild;
+        guild.addModLog({
+          moderator: message.member! as NucleusGuildMember,
+          offender: member.id,
+          reason,
+          case_type: ModerationTypes.Warn,
+          duration: undefined,
+        });
       } else {
         message.reply("I can't find that user.");
         return;

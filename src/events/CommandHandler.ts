@@ -13,6 +13,12 @@ export default class CommandHandler extends Event {
   async execute(message: Message) {
     if (!this.client.user) return;
     if (message.author.bot) return;
+    if (
+      !message.guild?.me
+        ?.permissionsIn(message.channel)
+        .has(['SEND_MESSAGES', 'VIEW_CHANNEL'])
+    )
+      return;
     const prefix = await this.getPrefix(message);
     if (prefix !== undefined) {
       const args = message.content.substring(prefix.length).split(' ');

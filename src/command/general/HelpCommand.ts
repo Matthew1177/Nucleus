@@ -1,8 +1,12 @@
 import {Client, Message} from 'discord.js';
 import CommandHandler from '../../events/CommandHandler';
 import Command from '../../structures/Command';
+import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class HelpCommand extends Command {
+  permissions: NucleusPermissions = new NucleusPermissions(0);
+  dm = true;
+  guild = true;
   name = 'help';
   description = 'Provides help';
   usage =

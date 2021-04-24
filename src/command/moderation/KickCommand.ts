@@ -1,6 +1,8 @@
 import {Message} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
+import NucleusGuild, {ModerationTypes} from '../../extensions/NucleusGuild';
+import NucleusGuildMember from '../../extensions/NucleusGuildMember';
 import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
@@ -40,13 +42,22 @@ export default class KickCommand extends Command {
           );
           return;
         }
-        if (member.kickable) {
-          args.pop();
-          args.pop();
+        if (member.bannable) {
+          args.shift();
+          args.shift();
+          const reason = args.join(' ');
           member
-            .kick(args.join(' '))
+            .kick(reason)
             .then(() => {
               message.reply(member.user.tag + ' kicked.');
+              const guild = member.guild as NucleusGuild;
+              guild.addModLog({
+                moderator: message.member! as NucleusGuildMember,
+                offender: member.id,
+                reason,
+                case_type: ModerationTypes.Kick,
+                duration: undefined,
+              });
             })
             .catch(e => {
               console.error(e);
@@ -54,7 +65,7 @@ export default class KickCommand extends Command {
             });
         } else {
           message.reply(
-            "I can't kick that user. Please make sure I have `KICK_MEMBERS` permission and have a higher role than that user."
+            "I can't ban that user. Please make sure I have `KICK_MEMBERS` permission and have a higher role than that user."
           );
           return;
         }

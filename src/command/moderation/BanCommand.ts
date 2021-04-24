@@ -1,11 +1,14 @@
 import {Message} from 'discord.js';
 import {REGEX} from '../../Constants';
 import InvalidArgumentsError from '../../errors/InvalidArgumentsError';
+import NucleusGuild, {ModerationTypes} from '../../extensions/NucleusGuild';
+import NucleusGuildMember from '../../extensions/NucleusGuildMember';
 import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class BanCommand extends Command {
   name = 'ban';
+  aliases = ['pban', 'permban'];
 
   description = 'Permanently ban a member';
 
@@ -25,6 +28,9 @@ export default class BanCommand extends Command {
       if (!idreg) throw new InvalidArgumentsError();
       const id = idreg[0];
       const member = message.guild!.members.cache.get(id);
+      args.shift();
+      args.shift();
+      const reason = args.join(' ');
       if (member) {
         if (member.id === message.guild!.ownerID) {
           message.reply("I can't ban the server owner.");
@@ -42,13 +48,18 @@ export default class BanCommand extends Command {
           return;
         }
         if (member.bannable) {
-          args.pop();
-          args.pop();
-
           member
-            .ban({reason: args.join(' '), days: 1})
+            .ban({reason, days: 1})
             .then(() => {
               message.reply(member.user.tag + ' banned.');
+              const guild = member.guild as NucleusGuild;
+              guild.addModLog({
+                moderator: message.member! as NucleusGuildMember,
+                offender: member.id,
+                reason,
+                case_type: ModerationTypes.Ban,
+                duration: undefined,
+              });
             })
             .catch(e => {
               console.error(e);
@@ -61,7 +72,23 @@ export default class BanCommand extends Command {
           return;
         }
       } else {
-        message.reply("I can't find that user.");
+        message
+          .guild!.members.ban(id, {days: 1, reason})
+          .then(() => {
+            message.reply(`<@${id}>` + ' banned.');
+            const guild = message.member!.guild as NucleusGuild;
+            guild.addModLog({
+              moderator: message.member! as NucleusGuildMember,
+              offender: id,
+              reason,
+              case_type: ModerationTypes.Ban,
+              duration: undefined,
+            });
+          })
+          .catch(e => {
+            console.error(e);
+            message.reply('Unable to ban that member.');
+          });
         return;
       }
     } else {

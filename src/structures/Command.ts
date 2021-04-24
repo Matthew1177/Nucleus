@@ -9,9 +9,9 @@ export default abstract class Command {
   /**
    * Will only be checked if the command is run on a guild.
    */
-  permissions: NucleusPermissions = new NucleusPermissions(0);
-  dm = true;
-  guild = true;
+  abstract permissions: NucleusPermissions;
+  abstract dm: boolean;
+  abstract guild: boolean;
   abstract description: string;
   abstract usage: string;
   abstract example: string;
