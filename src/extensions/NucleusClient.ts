@@ -16,7 +16,8 @@ export default class NucleusClient extends Client {
           'DIRECT_MESSAGES',
         ],
       },
-      disableMentions: 'all',
+      disableMentions: 'everyone',
+      allowedMentions: {},
     });
 
     this.pool = new Pool();

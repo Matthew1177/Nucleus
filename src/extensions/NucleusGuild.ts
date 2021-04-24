@@ -1,5 +1,5 @@
 import {Guild, MessageEmbed} from 'discord.js';
-import {GUILD_SETTINGS_LIFETIME} from '../Constants';
+import {GUILD_SETTINGS_LIFETIME, NCS} from '../Constants';
 import GuildSettings from '../structures/GuildSettings';
 import NucleusClient from './NucleusClient';
 import NucleusGuildMember from './NucleusGuildMember';
@@ -101,15 +101,22 @@ export default class NucleusGuild extends Guild {
             .has(['VIEW_CHANNEL', 'SEND_MESSAGES'])
         ) {
           if (channel.isText()) {
+            const offender = client.users.cache.get(option.offender);
             channel.send(
               new MessageEmbed()
                 .setTitle('Member ' + ModerationTypes[option.case_type])
                 .setDescription(
-                  `**Offender:** <@!${option.offender}>
-                  **Moderator:** ${option.moderator}
+                  `**Offender:** ${offender ? offender.tag + ' ' : ''}${
+                    offender || `<@${option.offender}>`
+                  }
+                  **Moderator:** ${option.moderator.user.tag} ${
+                    option.moderator
+                  }
                   **Reason:** ${option.reason || 'Unspecified.'}`
                 )
                 .setFooter(`Case ID: ${uuid}`)
+                .setColor(NCS.BLUE)
+                .setTimestamp(new Date())
             );
           }
         }

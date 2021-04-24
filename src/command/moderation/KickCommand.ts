@@ -49,7 +49,9 @@ export default class KickCommand extends Command {
           member
             .kick(reason)
             .then(() => {
-              message.reply(member.user.tag + ' kicked.');
+              message.channel.send(
+                `<@${id}>` + ' kicked. Reason: ' + (reason || 'Unspecified.')
+              );
               const guild = member.guild as NucleusGuild;
               guild.addModLog({
                 moderator: message.member! as NucleusGuildMember,

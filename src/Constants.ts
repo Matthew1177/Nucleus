@@ -13,3 +13,12 @@ export const COLORS = {
   NOT_QUITE_BLACK: 0x23272a,
   ACTUALLY_BLACK: 0x000000,
 };
+
+export const NCS = {
+  WHITE: 0xffffff,
+  BLACK: 0x000000,
+  GREEN: 0x009f6b,
+  RED: 0xc40233,
+  YELLOW: 0xffd300,
+  BLUE: 0x0087bd,
+};

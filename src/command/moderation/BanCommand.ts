@@ -75,7 +75,9 @@ export default class BanCommand extends Command {
         message
           .guild!.members.ban(id, {days: 1, reason})
           .then(() => {
-            message.reply(`<@${id}>` + ' banned.');
+            message.channel.send(
+              `<@${id}>` + ' banned. Reason: ' + (reason || 'Unspecified.')
+            );
             const guild = message.member!.guild as NucleusGuild;
             guild.addModLog({
               moderator: message.member! as NucleusGuildMember,
