@@ -7,17 +7,17 @@ import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class WarnCommand extends Command {
-  name = 'warn';
+  readonly name = 'warn';
 
-  guild = true;
-  dm = false;
+  readonly guild = true;
+  readonly dm = false;
 
-  description = 'Warns a member';
+  readonly description = 'Warns a member';
 
-  usage = '!warn [user] (reason) - Warns user for a optional reason';
-  example = '\n!warn @Math LEAVE!\n!warn @Math';
+  readonly usage = '!warn [user] (reason) - Warns user for a optional reason';
+  readonly example = '\n!warn @Math LEAVE!\n!warn @Math';
 
-  permissions = new NucleusPermissions('KICK_MEMBERS');
+  readonly permissions = new NucleusPermissions('KICK_MEMBERS');
 
   async execute(message: Message, args: string[]) {
     if (args[1]) {

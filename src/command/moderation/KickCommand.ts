@@ -7,17 +7,17 @@ import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class KickCommand extends Command {
-  name = 'kick';
+  readonly name = 'kick';
 
-  guild = true;
-  dm = false;
+  readonly guild = true;
+  readonly dm = false;
 
-  description = 'Kicks a member';
+  readonly description = 'Kicks a member';
 
-  usage = '!kick [user] (reason) - Kicks user for a optional reason';
-  example = '\n!kick @Math LEAVE!\n!kick @Math!';
+  readonly usage = '!kick [user] (reason) - Kicks user for a optional reason';
+  readonly example = '\n!kick @Math LEAVE!\n!kick @Math!';
 
-  permissions = new NucleusPermissions('KICK_MEMBERS');
+  readonly permissions = new NucleusPermissions('KICK_MEMBERS');
 
   async execute(message: Message, args: string[]) {
     if (args[1]) {

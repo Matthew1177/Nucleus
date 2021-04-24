@@ -1,13 +1,10 @@
 import NucleusClient from '../extensions/NucleusClient';
 
 export default abstract class Event {
-  client: NucleusClient;
-  abstract name: string;
-  once = false;
+  abstract readonly name: string;
+  readonly once = false;
 
-  constructor(client: NucleusClient) {
-    this.client = client;
-  }
+  constructor(readonly client: NucleusClient) {}
 
   abstract execute(...args: unknown[]): void;
 }

@@ -7,7 +7,7 @@ import Command from '../structures/Command';
 import Event from '../structures/Event';
 
 export default class CommandHandler extends Event {
-  name = 'message';
+  readonly name = 'message';
   commands = new Collection<string, Command>();
 
   async execute(message: Message) {

@@ -4,18 +4,16 @@ import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class HelpCommand extends Command {
-  permissions: NucleusPermissions = new NucleusPermissions(0);
-  dm = true;
-  guild = true;
-  name = 'help';
-  description = 'Provides help';
-  usage =
+  readonly permissions: NucleusPermissions = new NucleusPermissions(0);
+  readonly dm = true;
+  readonly guild = true;
+  readonly name = 'help';
+  readonly description = 'Provides help';
+  readonly usage =
     '!help (command) - Provides help information for the command or help information for the bot';
-  example = '\n!help\n!help ban';
+  readonly example = '\n!help\n!help ban';
 
-  commandHandler: CommandHandler;
-
-  constructor(client: Client, commandHandler: CommandHandler) {
+  constructor(client: Client, readonly commandHandler: CommandHandler) {
     super(client);
     this.commandHandler = commandHandler;
   }

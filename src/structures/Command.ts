@@ -2,23 +2,20 @@ import {Client, Message} from 'discord.js';
 import NucleusPermissions from './NucleusPermissions';
 
 export default abstract class Command {
-  client: Client;
-  abstract name: string;
-  aliases: string[] = [];
-  premium = false;
+  abstract readonly name: string;
+  readonly aliases: string[] = [];
+  readonly premium = false;
   /**
    * Will only be checked if the command is run on a guild.
    */
-  abstract permissions: NucleusPermissions;
-  abstract dm: boolean;
-  abstract guild: boolean;
-  abstract description: string;
-  abstract usage: string;
-  abstract example: string;
+  abstract readonly permissions: NucleusPermissions;
+  abstract readonly dm: boolean;
+  abstract readonly guild: boolean;
+  abstract readonly description: string;
+  abstract readonly usage: string;
+  abstract readonly example: string;
 
-  constructor(client: Client) {
-    this.client = client;
-  }
+  constructor(readonly client: Client) {}
 
   abstract execute(message: Message, args: string[]): void;
 }

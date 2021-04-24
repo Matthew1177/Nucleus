@@ -7,19 +7,19 @@ import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
 export default class BanCommand extends Command {
-  name = 'ban';
-  aliases = ['pban', 'permban'];
+  readonly name = 'ban';
+  readonly aliases = ['pban', 'permban'];
 
-  description = 'Permanently ban a member';
+  readonly description = 'Permanently ban a member';
 
-  usage =
+  readonly usage =
     '!ban [user] (reason) - Permanently bans a user for an optional reason';
-  example = '\n!ban @Silk Begone forever!\n!ban @Silk';
+  readonly example = '\n!ban @Silk Begone forever!\n!ban @Silk';
 
-  guild = true;
-  dm = false;
+  readonly guild = true;
+  readonly dm = false;
 
-  permissions = new NucleusPermissions('BAN_MEMBERS');
+  readonly permissions = new NucleusPermissions('BAN_MEMBERS');
 
   async execute(message: Message, args: string[]) {
     if (args[1]) {
