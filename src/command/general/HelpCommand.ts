@@ -1,5 +1,6 @@
-import {Client, Message, Permissions} from 'discord.js';
+import {Message, Permissions} from 'discord.js';
 import CommandHandler from '../../events/CommandHandler';
+import NucleusClient from '../../extensions/NucleusClient';
 import Command from '../../structures/Command';
 import NucleusPermissions from '../../structures/NucleusPermissions';
 
@@ -14,8 +15,11 @@ export default class HelpCommand extends Command {
     '!help (command) - Provides help information for the command or help information for the bot';
   readonly example = '\n!help\n!help ban';
 
-  constructor(client: Client, readonly commandHandler: CommandHandler) {
+  readonly commandHandler: CommandHandler;
+
+  constructor(client: NucleusClient, commandHandler: CommandHandler) {
     super(client);
+    this.commandHandler = commandHandler;
   }
 
   execute(message: Message, args: string[]): void {

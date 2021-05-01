@@ -1,4 +1,4 @@
-import {Client, Constructable} from 'discord.js';
+import {Client} from 'discord.js';
 import {Pool} from 'pg';
 import Event from '../structures/Event';
 
@@ -23,12 +23,8 @@ export default class NucleusClient extends Client {
     this.pool = new Pool();
   }
 
-  registerEvent<T extends Event>(
-    eventClass: Constructable<T>,
-    ...args: unknown[]
-  ): T {
-    const event = new eventClass(this, ...args);
+  registerEvent(event: Event) {
     super[event.once ? 'once' : 'on'](event.name, event.execute.bind(event));
-    return event;
+    return this;
   }
 }

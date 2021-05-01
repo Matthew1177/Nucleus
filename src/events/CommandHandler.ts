@@ -1,4 +1,4 @@
-import {Collection, Constructable, Message, MessageEmbed} from 'discord.js';
+import {Collection, Message, MessageEmbed} from 'discord.js';
 import {COLORS} from '../Constants';
 import InvalidArgumentsError from '../errors/InvalidArgumentsError';
 import NucleusClient from '../extensions/NucleusClient';
@@ -60,14 +60,10 @@ export default class CommandHandler extends Event {
     }
   }
 
-  registerCommand<T extends Command>(
-    commandClass: Constructable<T>,
-    ...args: unknown[]
-  ): T {
-    const command = new commandClass(this.client, ...args);
+  registerCommand(command: Command) {
     if (this.commands.has(command.name)) throw new Error('Duplicate command');
     this.commands.set(command.name, command);
-    return command;
+    return this;
   }
 
   getCommand(name: string): Command | undefined {

@@ -1,10 +1,8 @@
-import NucleusClient from '../extensions/NucleusClient';
+import Base from './Base';
 
-export default abstract class Event {
+export default abstract class Event extends Base {
   abstract readonly name: string;
   readonly once = false;
-
-  constructor(readonly client: NucleusClient) {}
 
   abstract execute(...args: unknown[]): void;
 }
