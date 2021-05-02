@@ -83,10 +83,10 @@ export default class CommandHandler extends Event {
   }
 
   private async getPrefix(message: Message): Promise<string | undefined> {
-    if (message.content.startsWith(`<@${this.client.user!.id}>`))
-      return `<@${this.client.user!.id}>`;
-    if (message.content.startsWith(`<@!${this.client.user!.id}>`))
-      return `<@!${this.client.user!.id}>`;
+    if (message.content.startsWith(`<@${this.client.user!.id}> `))
+      return `<@${this.client.user!.id}> `;
+    if (message.content.startsWith(`<@!${this.client.user!.id}> `))
+      return `<@!${this.client.user!.id}> `;
 
     if (message.channel.type === 'dm') {
       if (message.content.startsWith('!')) return '!';
