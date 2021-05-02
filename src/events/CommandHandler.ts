@@ -119,7 +119,8 @@ export default class CommandHandler extends Event {
       return new MessageEmbed()
         .setColor(COLORS.DARK_BUT_NOT_BLACK)
         .setTitle('Kernel - An advanced moderation bot')
-        .setDescription('')
+        .setDescription('Private Beta');
+    /*
         .addField(
           'Resources',
           `**[Invite](https://google.com)**
@@ -127,5 +128,6 @@ export default class CommandHandler extends Event {
           **[Dashboard](https://google.com)**
           **[Premium](https://google.com)**`
         );
+        */
   }
 }
