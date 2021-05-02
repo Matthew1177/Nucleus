@@ -62,8 +62,8 @@ export default class NucleusGuild extends Guild {
   async fetchModLogs(member: string) {
     const client = this.client as NucleusClient;
     const res = await client.pool.query(
-      'SELECT * FROM public.guild_moderation_logs WHERE offender_id=$1;',
-      [member]
+      'SELECT * FROM public.guild_moderation_logs WHERE offender_id=$1 AND guild_id=$2;',
+      [member, this.id]
     );
     return res.rows;
   }
@@ -71,8 +71,8 @@ export default class NucleusGuild extends Guild {
   async fetchCase(uuid: string) {
     const client = this.client as NucleusClient;
     const res = await client.pool.query(
-      'SELECT * FROM public.guild_moderation_logs WHERE id=$1;',
-      [uuid]
+      'SELECT * FROM public.guild_moderation_logs WHERE id=$1 AND guild_id=$2;',
+      [uuid, this.id]
     );
     return res.rows;
   }
