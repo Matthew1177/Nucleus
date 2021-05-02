@@ -16,10 +16,13 @@ export default class NucleusGuildMember extends GuildMember {
           .everyone as NucleusRole).fetchNucleusPermissions()
       ).bitfield,
     ];
-    this.roles.cache.forEach(async (role: Role) => {
-      const nrole = role as NucleusRole;
-      permissionsArray.push((await nrole.fetchNucleusPermissions()).bitfield);
-    });
+    await Promise.all(
+      this.roles.cache.map(async (role: Role) => {
+        const nrole = role as NucleusRole;
+        permissionsArray.push((await nrole.fetchNucleusPermissions()).bitfield);
+      })
+    );
+
     return new NucleusPermissions(permissionsArray).has(permission);
   }
 }
