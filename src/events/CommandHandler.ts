@@ -41,6 +41,15 @@ export default class CommandHandler extends Event {
               .guild!.me!.permissionsIn(message.channel)
               .has(command.botPermissions)
           ) {
+            if (
+              !message
+                .guild!.me!.permissionsIn(message.channel)
+                .has('EMBED_LINKS')
+            ) {
+              message.channel.send(
+                'Please grant me the `EMBED_LINKS` permission to execute commands.'
+              );
+            }
             this.executeCommand(command, message, args);
           } else {
             message.channel.send(
