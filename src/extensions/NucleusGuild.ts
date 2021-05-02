@@ -59,11 +59,20 @@ export default class NucleusGuild extends Guild {
     }
   }
 
-  async fetchModLogs(member: NucleusGuildMember) {
+  async fetchModLogs(member: string) {
     const client = this.client as NucleusClient;
     const res = await client.pool.query(
-      'SELECT * FROM public.guild_moderation_logs WHERE punished_id=$1;',
-      [member.id]
+      'SELECT * FROM public.guild_moderation_logs WHERE offender_id=$1;',
+      [member]
+    );
+    return res.rows;
+  }
+
+  async fetchCase(uuid: string) {
+    const client = this.client as NucleusClient;
+    const res = await client.pool.query(
+      'SELECT * FROM public.guild_moderation_logs WHERE id=$1;',
+      [uuid]
     );
     return res.rows;
   }

@@ -3,6 +3,7 @@ export const PERMISSIONS_SETTINGS_LIFETIME = 5 * 60 * 1000;
 export const REGEX = {
   MENTION: /(?<=^<@!?)\d+(?=>$)/,
   SNOWFLAKE: /^\d+$/,
+  UUID: /^\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/,
 };
 
 export const COLORS = {
