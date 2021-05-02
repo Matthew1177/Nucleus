@@ -9,10 +9,11 @@ export default class LogsCommand extends Command {
   readonly botPermissions = new Permissions(0);
   readonly name = 'logs';
 
-  readonly description = 'todo';
+  readonly description =
+    "Fetches the id's of cases where the specified user is the offender";
 
-  readonly usage = 'todo';
-  readonly example = 'todo';
+  readonly usage = '!logs (user)';
+  readonly example = '@logs @Matthew';
 
   readonly guild = true;
   readonly dm = false;
