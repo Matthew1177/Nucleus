@@ -11,8 +11,8 @@ export default class CaseCommand extends Command {
 
   readonly description = 'Warns a member';
 
-  readonly usage = '!case [case id] - Retrieves information about a case';
-  readonly example = '!case d638bbae-aae4-11eb-bcbc-0242ac130002';
+  readonly usage = '{p}case [case id] - Retrieves information about a case';
+  readonly example = '{p}case d638bbae-aae4-11eb-bcbc-0242ac130002';
 
   readonly guild = true;
   readonly dm = false;

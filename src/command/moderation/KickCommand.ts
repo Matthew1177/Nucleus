@@ -15,8 +15,8 @@ export default class KickCommand extends Command {
 
   readonly description = 'Kicks a member';
 
-  readonly usage = '!kick [user] (reason) - Kicks user for a optional reason';
-  readonly example = '\n!kick @Math LEAVE!\n!kick @Math';
+  readonly usage = '{p}kick [user] (reason) - Kicks user for a optional reason';
+  readonly example = '\n{p}kick @Math LEAVE!\n{p}kick @Math';
 
   readonly permissions = new NucleusPermissions('KICK_MEMBERS');
 

@@ -12,8 +12,8 @@ export default class LogsCommand extends Command {
   readonly description =
     "Fetches the id's of cases where the specified user is the offender";
 
-  readonly usage = '!logs (user)';
-  readonly example = '!logs @Matthew';
+  readonly usage = '{p}logs (user)';
+  readonly example = '{p}logs @Matthew';
 
   readonly guild = true;
   readonly dm = false;

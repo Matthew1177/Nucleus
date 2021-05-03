@@ -15,8 +15,8 @@ export default class WarnCommand extends Command {
 
   readonly description = 'Warns a member';
 
-  readonly usage = '!warn [user] (reason) - Warns user for a optional reason';
-  readonly example = '\n!warn @Math LEAVE!\n!warn @Math';
+  readonly usage = '{p}warn [user] (reason) - Warns user for a optional reason';
+  readonly example = '\n{p}warn @Math LEAVE!\n{p}warn @Math';
 
   readonly permissions = new NucleusPermissions('KICK_MEMBERS');
 

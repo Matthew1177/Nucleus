@@ -12,8 +12,8 @@ export default class HelpCommand extends Command {
   readonly name = 'help';
   readonly description = 'Provides help';
   readonly usage =
-    '!help (command) - Provides help information for the command or help information for the bot';
-  readonly example = '\n!help\n!help ban';
+    '{p}help (command) - Provides help information for the command or help information for the bot';
+  readonly example = '\n{p}help\n{p}help ban';
 
   readonly commandHandler: CommandHandler;
 
@@ -25,7 +25,8 @@ export default class HelpCommand extends Command {
   execute(message: Message, args: string[]): void {
     message.channel.send(
       this.commandHandler.helpEmbed(
-        args[1] ? this.commandHandler.getCommand(args[1]) : undefined
+        args[1] ? this.commandHandler.getCommand(args[1]) : undefined,
+        message.content.slice(0, message.content.length - args.join(' ').length)
       )
     );
   }

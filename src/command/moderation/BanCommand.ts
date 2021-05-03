@@ -14,8 +14,8 @@ export default class BanCommand extends Command {
   readonly description = 'Permanently ban a member';
 
   readonly usage =
-    '!ban [user] (reason) - Permanently bans a user for an optional reason';
-  readonly example = '\n!ban @Silk Begone forever!\n!ban @Silk';
+    '{p}ban [user] (reason) - Permanently bans a user for an optional reason';
+  readonly example = '\n{p}ban @Silk Begone forever!\n{p}ban @Silk';
 
   readonly guild = true;
   readonly dm = false;

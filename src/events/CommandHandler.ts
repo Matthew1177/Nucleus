@@ -50,7 +50,7 @@ export default class CommandHandler extends Event {
                 'Please grant me the `EMBED_LINKS` permission to execute commands.'
               );
             }
-            this.executeCommand(command, message, args);
+            this.executeCommand(command, message, args, prefix);
           } else {
             message.channel.send(
               'This command cannot be executed because permissions are missing. The required permissions are: `' +
@@ -64,7 +64,7 @@ export default class CommandHandler extends Event {
         }
       } else if (command.dm && message.channel.type === 'dm') {
         // dm
-        this.executeCommand(command, message, args);
+        this.executeCommand(command, message, args, prefix);
       }
     }
   }
@@ -103,18 +103,19 @@ export default class CommandHandler extends Event {
   private async executeCommand(
     command: Command,
     message: Message,
-    args: string[]
+    args: string[],
+    prefix: string
   ) {
     try {
       await command.execute(message, args);
     } catch (e) {
       if (e instanceof InvalidArgumentsError) {
-        message.channel.send(this.helpEmbed(command));
+        message.channel.send(this.helpEmbed(command, prefix));
       } else console.error(e);
     }
   }
 
-  helpEmbed(command: Command | undefined) {
+  helpEmbed(command: Command | undefined, prefix: string) {
     if (command)
       return new MessageEmbed()
         .setTitle(
@@ -122,7 +123,10 @@ export default class CommandHandler extends Event {
         )
         .setColor(COLORS.DARK_BUT_NOT_BLACK)
         .setDescription(
-          `**Description**: ${command.description}\n**Usage:** ${command.usage}\n**Example:** ${command.example}`
+          `**Description**: ${command.description}\n**Usage:** ${command.usage}\n**Example:** ${command.example}`.replace(
+            /\{p\}/g,
+            prefix
+          )
         );
     else
       return new MessageEmbed()
