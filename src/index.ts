@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 import HelpCommand from './command/general/HelpCommand';
+import PrefixCommand from './command/general/PrefixCommand';
 import BanCommand from './command/moderation/BanCommand';
 import CaseCommand from './command/moderation/CaseCommand';
 import KickCommand from './command/moderation/KickCommand';
@@ -19,6 +20,7 @@ const commandHandler = new CommandHandler(client)
   .registerCommand(new KickCommand(client))
   .registerCommand(new WarnCommand(client))
   .registerCommand(new CaseCommand(client))
+  .registerCommand(new PrefixCommand(client))
   .registerCommand(new LogsCommand(client));
 
 commandHandler.registerCommand(new HelpCommand(client, commandHandler));
